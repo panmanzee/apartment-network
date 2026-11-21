@@ -8,4 +8,4 @@ Baan Chalong Residence,102,TENANT-F2,active,floor 2 rooms 201-212
 Baan Chalong Residence,103,TENANT-F3,active,floor 3 rooms 301-312
 Baan Chalong Residence,104,TENANT-F4,active,floor 4 rooms 401-412
 Baan Chalong Residence,105,TENANT-F5,active,floor 5 rooms 501-512
-Baan Chalong Residence,999,TRANSIT,active,"native VLAN on the fw-edge to sw-core trunk, carries the transit /30 only"
+Baan Chalong Residence,999,TRANSIT,active,"unused native/parking VLAN, no user traffic; transit /30 not used"

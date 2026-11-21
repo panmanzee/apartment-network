@@ -1,7 +1,7 @@
 device,name,type,enabled,mode,description
 fw-edge,wan1,1000base-t,true,,ISP-A FTTx 1000/500
 fw-edge,wan2,1000base-t,true,,ISP-B FTTx 500/500
-fw-edge,lan1,1000base-t,true,tagged,"trunk to sw-core Gi1/0/1; untagged 999; tagged 10,20,30,40,101-105"
+fw-edge,lag-core,lag,true,tagged,"LACP internal1+internal2 to sw-core Gi1/0/1-2; untagged 999 (unused native); tagged 10,20,30,40,101-105"
 fw-edge,vlan10,virtual,true,,gateway MGMT
 fw-edge,vlan20,virtual,true,,gateway STAFF
 fw-edge,vlan30,virtual,true,,gateway CCTV
@@ -17,25 +17,25 @@ sw-f2,vlan10,virtual,true,,management
 sw-f3,vlan10,virtual,true,,management
 sw-f4,vlan10,virtual,true,,management
 sw-f5,vlan10,virtual,true,,management
-sw-core,Gi1/0/1,1000base-t,true,tagged,"trunk to fw-edge; untagged 999; tagged 10,20,30,40,101-105"
-sw-core,Gi1/0/2,1000base-t,true,tagged,"uplink sw-f1; untagged 10; tagged 30,101"
-sw-core,Gi1/0/3,1000base-t,true,tagged,"uplink sw-f2; untagged 10; tagged 30,102"
-sw-core,Gi1/0/4,1000base-t,true,tagged,"uplink sw-f3; untagged 10; tagged 30,103"
-sw-core,Gi1/0/5,1000base-t,true,tagged,"uplink sw-f4; untagged 10; tagged 30,104"
-sw-core,Gi1/0/6,1000base-t,true,tagged,"uplink sw-f5; untagged 10; tagged 30,105"
-sw-core,Gi1/0/7,1000base-t,true,access,nvr-01; untagged 30
-sw-core,Gi1/0/8,1000base-t,true,tagged,ap-lobby; untagged 10; tagged 40; protected
-sw-core,Gi1/0/9,1000base-t,true,access,cam-core-1 (gate); untagged 30; protected
-sw-core,Gi1/0/10,1000base-t,true,access,cam-core-2 (parking); untagged 30; protected
-sw-core,Gi1/0/11,1000base-t,true,access,cam-core-3 (lobby); untagged 30; protected
-sw-core,Gi1/0/12,1000base-t,true,access,cam-core-4 (back); untagged 30; protected
-sw-core,Gi1/0/13,1000base-t,true,access,mon-01; untagged 10
-sw-core,Gi1/0/14,1000base-t,true,access,staff office; untagged 20
-sw-core,Gi1/0/15,1000base-t,true,access,staff office; untagged 20
-sw-core,Gi1/0/16,1000base-t,true,access,staff office; untagged 20
+sw-core,Gi1/0/1,1000base-t,true,tagged,"LACP to fw-edge (lag-core); untagged 999; tagged 10,20,30,40,101-105"
+sw-core,Gi1/0/2,1000base-t,true,tagged,"LACP to fw-edge (lag-core); untagged 999; tagged 10,20,30,40,101-105"
+sw-core,Gi1/0/3,1000base-t,true,access,mon-01; untagged 10
+sw-core,Gi1/0/4,1000base-t,true,access,admin port (MGMT); untagged 10
+sw-core,Gi1/0/5,1000base-t,true,access,nvr-01; untagged 30
+sw-core,Gi1/0/6,1000base-t,true,tagged,ap-lobby; untagged 10; tagged 40; protected
+sw-core,Gi1/0/7,1000base-t,true,access,cam-core-1 (gate); untagged 30; protected
+sw-core,Gi1/0/8,1000base-t,true,access,cam-core-2 (parking); untagged 30; protected
+sw-core,Gi1/0/9,1000base-t,true,access,cam-core-3 (lobby); untagged 30; protected
+sw-core,Gi1/0/10,1000base-t,true,access,cam-core-4 (back); untagged 30; protected
+sw-core,Gi1/0/11,1000base-t,true,tagged,"uplink sw-f1; untagged 10; tagged 30,101"
+sw-core,Gi1/0/12,1000base-t,true,tagged,"uplink sw-f2; untagged 10; tagged 30,102"
+sw-core,Gi1/0/13,1000base-t,true,tagged,"uplink sw-f3; untagged 10; tagged 30,103"
+sw-core,Gi1/0/14,1000base-t,true,tagged,"uplink sw-f4; untagged 10; tagged 30,104"
+sw-core,Gi1/0/15,1000base-t,true,tagged,"uplink sw-f5; untagged 10; tagged 30,105"
 sw-core,Gi1/0/17,1000base-t,true,access,staff office; untagged 20
 sw-core,Gi1/0/18,1000base-t,true,access,staff office; untagged 20
-sw-core,Gi1/0/24,1000base-t,true,access,admin laptop (MGMT); untagged 10
+sw-core,Gi1/0/19,1000base-t,true,access,staff office; untagged 20
+sw-core,Gi1/0/20,1000base-t,true,access,staff office; untagged 20
 sw-f1,Gi1/0/1,1000base-t,true,access,room 101; untagged 101; protected
 sw-f1,Gi1/0/2,1000base-t,true,access,room 102; untagged 101; protected
 sw-f1,Gi1/0/3,1000base-t,true,access,room 103; untagged 101; protected

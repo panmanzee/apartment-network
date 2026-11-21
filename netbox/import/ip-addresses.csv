@@ -8,8 +8,6 @@ address,status,dns_name,description,device,interface,is_primary
 10.21.3.1/24,active,,gateway TENANT-F3,fw-edge,vlan103,false
 10.21.4.1/24,active,,gateway TENANT-F4,fw-edge,vlan104,false
 10.21.5.1/24,active,,gateway TENANT-F5,fw-edge,vlan105,false
-10.20.0.1/30,active,,transit,fw-edge,lan1,false
-10.20.0.2/30,active,,transit,sw-core,Gi1/0/1,false
 10.20.10.2/24,active,sw-core.baan-chalong.lan,management,sw-core,vlan10,true
 10.20.10.11/24,active,sw-f1.baan-chalong.lan,management,sw-f1,vlan10,true
 10.20.10.12/24,active,sw-f2.baan-chalong.lan,management,sw-f2,vlan10,true

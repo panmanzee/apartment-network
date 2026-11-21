@@ -18,7 +18,7 @@ Source: `plan/ip-plan.yaml`. Rows marked (doc) are not in the yaml, they are cho
 | 103 | TENANT-F3 | 10.21.3.0/24 | 10.21.3.1 | yes | floor 3 rooms 301-312 |
 | 104 | TENANT-F4 | 10.21.4.0/24 | 10.21.4.1 | yes | floor 4 rooms 401-412 |
 | 105 | TENANT-F5 | 10.21.5.0/24 | 10.21.5.1 | yes | floor 5 rooms 501-512 |
-| 999 | TRANSIT (doc) | 10.20.0.0/30 | fw .1 / core .2 | no | transit, native VLAN on trunk |
+| 999 | TRANSIT (doc) | 10.20.0.0/30 | - | no | unused native/parking VLAN; transit net not used (L2 core) |
 
 ## Other prefixes
 
@@ -93,10 +93,10 @@ mon-01 is added in the docs, it is not in the yaml.
 | cam-f5-2 | 10.20.30.118 | sw-f5 | Gi1/0/16 |
 | cam-f5-3 | 10.20.30.119 | sw-f5 | Gi1/0/17 |
 | cam-f5-4 | 10.20.30.120 | sw-f5 | Gi1/0/18 |
-| cam-core-1 | 10.20.30.121 | sw-core | Gi1/0/9 |
-| cam-core-2 | 10.20.30.122 | sw-core | Gi1/0/10 |
-| cam-core-3 | 10.20.30.123 | sw-core | Gi1/0/11 |
-| cam-core-4 | 10.20.30.124 | sw-core | Gi1/0/12 |
+| cam-core-1 | 10.20.30.121 | sw-core | Gi1/0/7 |
+| cam-core-2 | 10.20.30.122 | sw-core | Gi1/0/8 |
+| cam-core-3 | 10.20.30.123 | sw-core | Gi1/0/9 |
+| cam-core-4 | 10.20.30.124 | sw-core | Gi1/0/10 |
 
 ## Reservations (doc)
 

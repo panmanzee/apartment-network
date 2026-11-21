@@ -27,7 +27,7 @@ Design decision: sw-core is a layer-2 switch. All VLAN gateways are on fw-edge (
 | 103 | TENANT-F3 | 10.21.3.0/24 | 10.21.3.1 | floor 3 rooms 301-312 |
 | 104 | TENANT-F4 | 10.21.4.0/24 | 10.21.4.1 | floor 4 rooms 401-412 |
 | 105 | TENANT-F5 | 10.21.5.0/24 | 10.21.5.1 | floor 5 rooms 501-512 |
-| 999 | TRANSIT (doc) | 10.20.0.0/30 | - | native VLAN of the fw-edge to sw-core trunk |
+| 999 | TRANSIT (doc) | 10.20.0.0/30 | - | unused native/parking VLAN (also the native VLAN on trunks); transit net not used, sw-core is L2 |
 
 ## 3. DHCP scopes
 
@@ -55,25 +55,25 @@ Protected = no traffic to other protected ports on the same switch. Only the upl
 
 | Port | Connected | Untagged VLAN | Tagged VLANs | Peer | Protected |
 |---|---|---|---|---|---|
-| Gi1/0/1 | trunk to fw-edge | 999 | 10,20,30,40,101-105 | fw-edge lan1 | no |
-| Gi1/0/2 | uplink sw-f1 | 10 | 30,101 | sw-f1 Gi1/0/24 | no |
-| Gi1/0/3 | uplink sw-f2 | 10 | 30,102 | sw-f2 Gi1/0/24 | no |
-| Gi1/0/4 | uplink sw-f3 | 10 | 30,103 | sw-f3 Gi1/0/24 | no |
-| Gi1/0/5 | uplink sw-f4 | 10 | 30,104 | sw-f4 Gi1/0/24 | no |
-| Gi1/0/6 | uplink sw-f5 | 10 | 30,105 | sw-f5 Gi1/0/24 | no |
-| Gi1/0/7 | nvr-01 | 30 | - | nvr-01 | no |
-| Gi1/0/8 | ap-lobby | 10 | 40 | ap-lobby | yes |
-| Gi1/0/9 | cam-core-1 (gate) | 30 | - | cam-core-1 | yes |
-| Gi1/0/10 | cam-core-2 (parking) | 30 | - | cam-core-2 | yes |
-| Gi1/0/11 | cam-core-3 (lobby) | 30 | - | cam-core-3 | yes |
-| Gi1/0/12 | cam-core-4 (back) | 30 | - | cam-core-4 | yes |
-| Gi1/0/13 | mon-01 | 10 | - | mon-01 | no |
-| Gi1/0/14 | staff office | 20 | - | office PC / printer / POS | no |
-| Gi1/0/15 | staff office | 20 | - | office PC / printer / POS | no |
-| Gi1/0/16 | staff office | 20 | - | office PC / printer / POS | no |
+| Gi1/0/1 | LACP to fw-edge (lag-core) | 999 | 10,20,30,40,101-105 | fw-edge internal1 | no |
+| Gi1/0/2 | LACP to fw-edge (lag-core) | 999 | 10,20,30,40,101-105 | fw-edge internal2 | no |
+| Gi1/0/3 | mon-01 | 10 | - | mon-01 | no |
+| Gi1/0/4 | admin port (MGMT) | 10 | - | admin laptop | no |
+| Gi1/0/5 | nvr-01 | 30 | - | nvr-01 | no |
+| Gi1/0/6 | ap-lobby | 10 | 40 | ap-lobby | yes |
+| Gi1/0/7 | cam-core-1 (gate) | 30 | - | cam-core-1 | yes |
+| Gi1/0/8 | cam-core-2 (parking) | 30 | - | cam-core-2 | yes |
+| Gi1/0/9 | cam-core-3 (lobby) | 30 | - | cam-core-3 | yes |
+| Gi1/0/10 | cam-core-4 (back) | 30 | - | cam-core-4 | yes |
+| Gi1/0/11 | uplink sw-f1 | 10 | 30,101 | sw-f1 Gi1/0/24 | no |
+| Gi1/0/12 | uplink sw-f2 | 10 | 30,102 | sw-f2 Gi1/0/24 | no |
+| Gi1/0/13 | uplink sw-f3 | 10 | 30,103 | sw-f3 Gi1/0/24 | no |
+| Gi1/0/14 | uplink sw-f4 | 10 | 30,104 | sw-f4 Gi1/0/24 | no |
+| Gi1/0/15 | uplink sw-f5 | 10 | 30,105 | sw-f5 Gi1/0/24 | no |
 | Gi1/0/17 | staff office | 20 | - | office PC / printer / POS | no |
 | Gi1/0/18 | staff office | 20 | - | office PC / printer / POS | no |
-| Gi1/0/24 | admin laptop (MGMT) | 10 | - | admin port | no |
+| Gi1/0/19 | staff office | 20 | - | office PC / printer / POS | no |
+| Gi1/0/20 | staff office | 20 | - | office PC / printer / POS | no |
 
 ### sw-f1 (10.20.10.11)
 
@@ -97,7 +97,7 @@ Protected = no traffic to other protected ports on the same switch. Only the upl
 | Gi1/0/16 | cam-f1-2 | 30 | - | cam-f1-2 | yes |
 | Gi1/0/17 | cam-f1-3 | 30 | - | cam-f1-3 | yes |
 | Gi1/0/18 | cam-f1-4 | 30 | - | cam-f1-4 | yes |
-| Gi1/0/24 | uplink to sw-core | 10 | 30,101 | sw-core Gi1/0/2 | no |
+| Gi1/0/24 | uplink to sw-core | 10 | 30,101 | sw-core Gi1/0/11 | no |
 
 ### sw-f2 (10.20.10.12)
 
@@ -121,7 +121,7 @@ Protected = no traffic to other protected ports on the same switch. Only the upl
 | Gi1/0/16 | cam-f2-2 | 30 | - | cam-f2-2 | yes |
 | Gi1/0/17 | cam-f2-3 | 30 | - | cam-f2-3 | yes |
 | Gi1/0/18 | cam-f2-4 | 30 | - | cam-f2-4 | yes |
-| Gi1/0/24 | uplink to sw-core | 10 | 30,102 | sw-core Gi1/0/3 | no |
+| Gi1/0/24 | uplink to sw-core | 10 | 30,102 | sw-core Gi1/0/12 | no |
 
 ### sw-f3 (10.20.10.13)
 
@@ -145,7 +145,7 @@ Protected = no traffic to other protected ports on the same switch. Only the upl
 | Gi1/0/16 | cam-f3-2 | 30 | - | cam-f3-2 | yes |
 | Gi1/0/17 | cam-f3-3 | 30 | - | cam-f3-3 | yes |
 | Gi1/0/18 | cam-f3-4 | 30 | - | cam-f3-4 | yes |
-| Gi1/0/24 | uplink to sw-core | 10 | 30,103 | sw-core Gi1/0/4 | no |
+| Gi1/0/24 | uplink to sw-core | 10 | 30,103 | sw-core Gi1/0/13 | no |
 
 ### sw-f4 (10.20.10.14)
 
@@ -169,7 +169,7 @@ Protected = no traffic to other protected ports on the same switch. Only the upl
 | Gi1/0/16 | cam-f4-2 | 30 | - | cam-f4-2 | yes |
 | Gi1/0/17 | cam-f4-3 | 30 | - | cam-f4-3 | yes |
 | Gi1/0/18 | cam-f4-4 | 30 | - | cam-f4-4 | yes |
-| Gi1/0/24 | uplink to sw-core | 10 | 30,104 | sw-core Gi1/0/5 | no |
+| Gi1/0/24 | uplink to sw-core | 10 | 30,104 | sw-core Gi1/0/14 | no |
 
 ### sw-f5 (10.20.10.15)
 
@@ -193,9 +193,9 @@ Protected = no traffic to other protected ports on the same switch. Only the upl
 | Gi1/0/16 | cam-f5-2 | 30 | - | cam-f5-2 | yes |
 | Gi1/0/17 | cam-f5-3 | 30 | - | cam-f5-3 | yes |
 | Gi1/0/18 | cam-f5-4 | 30 | - | cam-f5-4 | yes |
-| Gi1/0/24 | uplink to sw-core | 10 | 30,105 | sw-core Gi1/0/6 | no |
+| Gi1/0/24 | uplink to sw-core | 10 | 30,105 | sw-core Gi1/0/15 | no |
 
-Unused ports: shut down, description `unused`. Ports 19-23 on sw-fN are spare.
+Unused ports: shut down, description `unused`. Spare ports on sw-fN: 19-23. Spare ports on sw-core: 21-24 and 16.
 
 ## 5. Wi-Fi (Omada)
 
@@ -228,8 +228,8 @@ AP management is on MGMT 10 (untagged on the AP port). Each AP port carries its 
 
 - `internet` = anything outside RFC1918. `rfc1918` = 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16.
 - GUEST deny to rfc1918 sits above GUEST allow to internet on purpose.
-- Local-in (traffic to the firewall itself): DHCP and DNS from every VLAN except CCTV, NTP from CCTV, SSH/HTTPS admin only from MGMT and OWNER-VPN.
-- Shapers are per-IP on the firewall (tenant 100/50, guest 20/10). Wired rooms also get a 100/50 limit on the switch port.
+- Local-in (traffic to the firewall itself): DHCP on the DHCP VLANs, SSH/HTTPS admin and the NTP server only on the MGMT interface (as rendered in configs/). CCTV has no NTP source yet.
+- Shapers are per-IP on the firewall (tenant 100/50, guest 20/10). No per-port limit is set on the switches (not in the rendered configs).
 - NAT: source NAT to the active WAN interface for every internet allow rule. No NAT for VPN traffic.
 
 ## 7. WAN and VPN

@@ -66,7 +66,7 @@ vlans:
   desc: floor 5 rooms 501-512
 - vid: 999
   name: TRANSIT
-  desc: native VLAN on the fw-edge to sw-core trunk, carries the transit /30 only
+  desc: unused native/parking VLAN, no user traffic; transit /30 not used
 prefixes:
 - prefix: 10.20.10.0/24
   vid: 10
@@ -97,7 +97,7 @@ prefixes:
   desc: 'TENANT-F5: floor 5 rooms 501-512'
 - prefix: 10.20.0.0/30
   vid: 999
-  desc: transit fw-edge .1 / sw-core .2
+  desc: transit, not used (sw-core is L2); VLAN 999 is the unused native/parking VLAN
 - prefix: 10.20.50.0/24
   vid: null
   desc: owner remote access VPN pool
@@ -286,10 +286,10 @@ interfaces:
   mode: ''
   desc: ISP-B FTTx 500/500
 - device: fw-edge
-  name: lan1
-  type: 1000base-t
+  name: lag-core
+  type: lag
   mode: tagged
-  desc: trunk to sw-core Gi1/0/1; untagged 999; tagged 10,20,30,40,101-105
+  desc: LACP internal1+internal2 to sw-core Gi1/0/1-2; untagged 999 (unused native); tagged 10,20,30,40,101-105
   untagged: 999
   tagged: 10,20,30,40,101-105
 - device: fw-edge
@@ -371,114 +371,107 @@ interfaces:
   name: Gi1/0/1
   type: 1000base-t
   mode: tagged
-  desc: trunk to fw-edge; untagged 999; tagged 10,20,30,40,101-105
+  desc: LACP to fw-edge (lag-core); untagged 999; tagged 10,20,30,40,101-105
   untagged: 999
   tagged: 10,20,30,40,101-105
 - device: sw-core
   name: Gi1/0/2
   type: 1000base-t
   mode: tagged
-  desc: uplink sw-f1; untagged 10; tagged 30,101
-  untagged: 10
-  tagged: 30,101
+  desc: LACP to fw-edge (lag-core); untagged 999; tagged 10,20,30,40,101-105
+  untagged: 999
+  tagged: 10,20,30,40,101-105
 - device: sw-core
   name: Gi1/0/3
-  type: 1000base-t
-  mode: tagged
-  desc: uplink sw-f2; untagged 10; tagged 30,102
-  untagged: 10
-  tagged: 30,102
-- device: sw-core
-  name: Gi1/0/4
-  type: 1000base-t
-  mode: tagged
-  desc: uplink sw-f3; untagged 10; tagged 30,103
-  untagged: 10
-  tagged: 30,103
-- device: sw-core
-  name: Gi1/0/5
-  type: 1000base-t
-  mode: tagged
-  desc: uplink sw-f4; untagged 10; tagged 30,104
-  untagged: 10
-  tagged: 30,104
-- device: sw-core
-  name: Gi1/0/6
-  type: 1000base-t
-  mode: tagged
-  desc: uplink sw-f5; untagged 10; tagged 30,105
-  untagged: 10
-  tagged: 30,105
-- device: sw-core
-  name: Gi1/0/7
-  type: 1000base-t
-  mode: access
-  desc: nvr-01; untagged 30
-  untagged: 30
-  tagged: ''
-- device: sw-core
-  name: Gi1/0/8
-  type: 1000base-t
-  mode: tagged
-  desc: ap-lobby; untagged 10; tagged 40; protected
-  untagged: 10
-  tagged: '40'
-- device: sw-core
-  name: Gi1/0/9
-  type: 1000base-t
-  mode: access
-  desc: cam-core-1 (gate); untagged 30; protected
-  untagged: 30
-  tagged: ''
-- device: sw-core
-  name: Gi1/0/10
-  type: 1000base-t
-  mode: access
-  desc: cam-core-2 (parking); untagged 30; protected
-  untagged: 30
-  tagged: ''
-- device: sw-core
-  name: Gi1/0/11
-  type: 1000base-t
-  mode: access
-  desc: cam-core-3 (lobby); untagged 30; protected
-  untagged: 30
-  tagged: ''
-- device: sw-core
-  name: Gi1/0/12
-  type: 1000base-t
-  mode: access
-  desc: cam-core-4 (back); untagged 30; protected
-  untagged: 30
-  tagged: ''
-- device: sw-core
-  name: Gi1/0/13
   type: 1000base-t
   mode: access
   desc: mon-01; untagged 10
   untagged: 10
   tagged: ''
 - device: sw-core
-  name: Gi1/0/14
+  name: Gi1/0/4
   type: 1000base-t
   mode: access
-  desc: staff office; untagged 20
-  untagged: 20
+  desc: admin port (MGMT); untagged 10
+  untagged: 10
   tagged: ''
+- device: sw-core
+  name: Gi1/0/5
+  type: 1000base-t
+  mode: access
+  desc: nvr-01; untagged 30
+  untagged: 30
+  tagged: ''
+- device: sw-core
+  name: Gi1/0/6
+  type: 1000base-t
+  mode: tagged
+  desc: ap-lobby; untagged 10; tagged 40; protected
+  untagged: 10
+  tagged: '40'
+- device: sw-core
+  name: Gi1/0/7
+  type: 1000base-t
+  mode: access
+  desc: cam-core-1 (gate); untagged 30; protected
+  untagged: 30
+  tagged: ''
+- device: sw-core
+  name: Gi1/0/8
+  type: 1000base-t
+  mode: access
+  desc: cam-core-2 (parking); untagged 30; protected
+  untagged: 30
+  tagged: ''
+- device: sw-core
+  name: Gi1/0/9
+  type: 1000base-t
+  mode: access
+  desc: cam-core-3 (lobby); untagged 30; protected
+  untagged: 30
+  tagged: ''
+- device: sw-core
+  name: Gi1/0/10
+  type: 1000base-t
+  mode: access
+  desc: cam-core-4 (back); untagged 30; protected
+  untagged: 30
+  tagged: ''
+- device: sw-core
+  name: Gi1/0/11
+  type: 1000base-t
+  mode: tagged
+  desc: uplink sw-f1; untagged 10; tagged 30,101
+  untagged: 10
+  tagged: 30,101
+- device: sw-core
+  name: Gi1/0/12
+  type: 1000base-t
+  mode: tagged
+  desc: uplink sw-f2; untagged 10; tagged 30,102
+  untagged: 10
+  tagged: 30,102
+- device: sw-core
+  name: Gi1/0/13
+  type: 1000base-t
+  mode: tagged
+  desc: uplink sw-f3; untagged 10; tagged 30,103
+  untagged: 10
+  tagged: 30,103
+- device: sw-core
+  name: Gi1/0/14
+  type: 1000base-t
+  mode: tagged
+  desc: uplink sw-f4; untagged 10; tagged 30,104
+  untagged: 10
+  tagged: 30,104
 - device: sw-core
   name: Gi1/0/15
   type: 1000base-t
-  mode: access
-  desc: staff office; untagged 20
-  untagged: 20
-  tagged: ''
-- device: sw-core
-  name: Gi1/0/16
-  type: 1000base-t
-  mode: access
-  desc: staff office; untagged 20
-  untagged: 20
-  tagged: ''
+  mode: tagged
+  desc: uplink sw-f5; untagged 10; tagged 30,105
+  untagged: 10
+  tagged: 30,105
 - device: sw-core
   name: Gi1/0/17
   type: 1000base-t
@@ -494,11 +487,18 @@ interfaces:
   untagged: 20
   tagged: ''
 - device: sw-core
-  name: Gi1/0/24
+  name: Gi1/0/19
   type: 1000base-t
   mode: access
-  desc: admin laptop (MGMT); untagged 10
-  untagged: 10
+  desc: staff office; untagged 20
+  untagged: 20
+  tagged: ''
+- device: sw-core
+  name: Gi1/0/20
+  type: 1000base-t
+  mode: access
+  desc: staff office; untagged 20
+  untagged: 20
   tagged: ''
 - device: sw-f1
   name: Gi1/0/1
@@ -1413,20 +1413,6 @@ ip_addresses:
   dns: ''
   status: active
   desc: gateway TENANT-F5
-  primary: false
-- address: 10.20.0.1/30
-  device: fw-edge
-  iface: lan1
-  dns: ''
-  status: active
-  desc: transit
-  primary: false
-- address: 10.20.0.2/30
-  device: sw-core
-  iface: Gi1/0/1
-  dns: ''
-  status: active
-  desc: transit
   primary: false
 - address: 10.20.10.2/24
   device: sw-core

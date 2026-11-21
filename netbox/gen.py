@@ -54,13 +54,13 @@ def build(plan):
     m = {"site": site["name"], "slug": site["slug"], "plan": plan}
     vlans = [{"vid": v["id"], "name": v["name"], "desc": v["desc"]} for v in plan["vlans"]]
     vlans.append({"vid": TRANSIT_VID, "name": TRANSIT_NAME,
-                  "desc": "native VLAN on the fw-edge to sw-core trunk, carries the transit /30 only"})
+                  "desc": "unused native/parking VLAN, no user traffic; transit /30 not used"})
     m["vlans"] = vlans
 
     prefixes = [{"prefix": v["subnet"], "vid": v["id"], "desc": f"{v['name']}: {v['desc']}"}
                 for v in plan["vlans"]]
     prefixes.append({"prefix": plan["transit"]["core_fw"], "vid": TRANSIT_VID,
-                     "desc": "transit fw-edge .1 / sw-core .2"})
+                     "desc": "transit, not used (sw-core is L2); VLAN 999 is the unused native/parking VLAN"})
     prefixes.append({"prefix": plan["vpn"]["owner"]["pool"], "vid": None,
                      "desc": "owner remote access VPN pool"})
     m["prefixes"] = prefixes
@@ -77,7 +77,7 @@ def build(plan):
     for i, loc in enumerate(CORE_CAMS, 1):
         n += 1
         cams.append({"name": f"cam-core-{i}", "role": "camera", "floor": 0, "sw": "sw-core",
-                     "port": 8 + i, "mgmt_ip": f"10.20.30.{CAM_BASE + n}", "loc": loc})
+                     "port": 6 + i, "mgmt_ip": f"10.20.30.{CAM_BASE + n}", "loc": loc})
     m["cams"] = cams
     devices += [{k: c[k] for k in ("name", "role", "mgmt_ip", "floor")} for c in cams]
     m["devices"] = devices
@@ -85,17 +85,19 @@ def build(plan):
     # port maps: {device: [(port, kind, untagged, tagged, peer/desc, protected)]}
     ports = {}
     core = []
-    core.append(("Gi1/0/1", "trunk to fw-edge", TRANSIT_VID, "10,20,30,40,101-105", "fw-edge lan1", False))
-    for f in range(1, 6):
-        core.append((f"Gi1/0/{f + 1}", f"uplink sw-f{f}", 10, f"30,{100 + f}", f"sw-f{f} Gi1/0/{ap['uplink']}", False))
-    core.append(("Gi1/0/7", "nvr-01", 30, "", "nvr-01", False))
-    core.append(("Gi1/0/8", "ap-lobby", 10, "40", "ap-lobby", True))
+    # same map as configs/render.py (CORE)
+    for i, p in enumerate((1, 2)):
+        core.append((f"Gi1/0/{p}", "LACP to fw-edge (lag-core)", TRANSIT_VID, "10,20,30,40,101-105", f"fw-edge internal{i + 1}", False))
+    core.append(("Gi1/0/3", "mon-01", 10, "", "mon-01", False))
+    core.append(("Gi1/0/4", "admin port (MGMT)", 10, "", "admin laptop", False))
+    core.append(("Gi1/0/5", "nvr-01", 30, "", "nvr-01", False))
+    core.append(("Gi1/0/6", "ap-lobby", 10, "40", "ap-lobby", True))
     for i, loc in enumerate(CORE_CAMS, 1):
-        core.append((f"Gi1/0/{8 + i}", f"cam-core-{i} ({loc})", 30, "", f"cam-core-{i}", True))
-    core.append(("Gi1/0/13", "mon-01", 10, "", "mon-01", False))
-    for p in range(14, 19):
+        core.append((f"Gi1/0/{6 + i}", f"cam-core-{i} ({loc})", 30, "", f"cam-core-{i}", True))
+    for f in range(1, 6):
+        core.append((f"Gi1/0/{10 + f}", f"uplink sw-f{f}", 10, f"30,{100 + f}", f"sw-f{f} Gi1/0/{ap['uplink']}", False))
+    for p in range(17, 21):
         core.append((f"Gi1/0/{p}", "staff office", 20, "", "office PC / printer / POS", False))
-    core.append((f"Gi1/0/{ap['uplink']}", "admin laptop (MGMT)", 10, "", "admin port", False))
     ports["sw-core"] = core
     for f in range(1, 6):
         rows = []
@@ -107,7 +109,7 @@ def build(plan):
             rows.append((f"Gi1/0/{p}", nm, 10, str(tv), nm, True))
         for i, p in enumerate(ap["cctv_ports"], 1):
             rows.append((f"Gi1/0/{p}", f"cam-f{f}-{i}", 30, "", f"cam-f{f}-{i}", True))
-        rows.append((f"Gi1/0/{ap['uplink']}", "uplink to sw-core", 10, f"30,{tv}", f"sw-core Gi1/0/{f + 1}", False))
+        rows.append((f"Gi1/0/{ap['uplink']}", "uplink to sw-core", 10, f"30,{tv}", f"sw-core Gi1/0/{10 + f}", False))
         ports[f"sw-f{f}"] = rows
     m["ports"] = ports
 
@@ -117,10 +119,6 @@ def build(plan):
     for v in plan["vlans"]:
         ips.append({"address": f"{v['gw']}/24", "device": "fw-edge", "iface": f"vlan{v['id']}",
                     "dns": "", "status": "active", "desc": f"gateway {v['name']}", "primary": v["id"] == 10})
-    ips.append({"address": "10.20.0.1/30", "device": "fw-edge", "iface": "lan1", "dns": "",
-                "status": "active", "desc": "transit", "primary": False})
-    ips.append({"address": "10.20.0.2/30", "device": "sw-core", "iface": "Gi1/0/1", "dns": "",
-                "status": "active", "desc": "transit", "primary": False})
     for d in devices:
         if d["name"] == "fw-edge":
             continue
@@ -138,7 +136,7 @@ def build(plan):
     ifs = []
     ifs.append({"device": "fw-edge", "name": "wan1", "type": "1000base-t", "mode": "", "desc": plan["site"]["isp"]["primary"]["name"]})
     ifs.append({"device": "fw-edge", "name": "wan2", "type": "1000base-t", "mode": "", "desc": plan["site"]["isp"]["backup"]["name"]})
-    ifs.append({"device": "fw-edge", "name": "lan1", "type": "1000base-t", "mode": "tagged", "desc": "trunk to sw-core Gi1/0/1; untagged 999; tagged 10,20,30,40,101-105",
+    ifs.append({"device": "fw-edge", "name": "lag-core", "type": "lag", "mode": "tagged", "desc": "LACP internal1+internal2 to sw-core Gi1/0/1-2; untagged 999 (unused native); tagged 10,20,30,40,101-105",
                 "untagged": TRANSIT_VID, "tagged": "10,20,30,40,101-105"})
     for v in plan["vlans"]:
         ifs.append({"device": "fw-edge", "name": f"vlan{v['id']}", "type": "virtual", "mode": "", "desc": f"gateway {v['name']}"})
@@ -272,7 +270,7 @@ def emit_docs(m):
          "## VLANs and subnets", "",
          md_table(["VLAN", "Name", "Subnet", "Gateway (on fw-edge)", "DHCP", "Use"],
                   [[v["id"], v["name"], v["subnet"], v["gw"], "yes" if v["dhcp"] else "no", v["desc"]] for v in plan["vlans"]]
-                  + [[TRANSIT_VID, TRANSIT_NAME + " (doc)", plan["transit"]["core_fw"], "fw .1 / core .2", "no", "transit, native VLAN on trunk"]]),
+                  + [[TRANSIT_VID, TRANSIT_NAME + " (doc)", plan["transit"]["core_fw"], "-", "no", "unused native/parking VLAN; transit net not used (L2 core)"]]),
          "", "## Other prefixes", "",
          md_table(["Prefix", "Use"], [[plan["vpn"]["owner"]["pool"], "owner VPN pool, allowed: " + ", ".join(plan["vpn"]["owner"]["allowed"])]]),
          "", "## DHCP scopes", "",
@@ -302,7 +300,7 @@ def emit_docs(m):
          "## 2. VLAN table", "",
          md_table(["VLAN", "Name", "Subnet", "Gateway", "Use"],
                   [[v["id"], v["name"], v["subnet"], v["gw"], v["desc"]] for v in plan["vlans"]]
-                  + [[TRANSIT_VID, TRANSIT_NAME + " (doc)", plan["transit"]["core_fw"], "-", "native VLAN of the fw-edge to sw-core trunk"]]),
+                  + [[TRANSIT_VID, TRANSIT_NAME + " (doc)", plan["transit"]["core_fw"], "-", "unused native/parking VLAN (also the native VLAN on trunks); transit net not used, sw-core is L2"]]),
          "", "## 3. DHCP scopes", "",
          md_table(["VLAN", "Name", "Subnet", "Gateway", "Pool", "Static", "DNS", "Lease"], dhcp_rows(plan)),
          "", "Reservations: " + ", ".join(f"{n} 10.20.20.{l}" for n, l in STAFF_RESERVATIONS) + ".",
@@ -316,7 +314,7 @@ def emit_docs(m):
         T += [f"### {dev} ({ip})", "",
               md_table(["Port", "Connected", "Untagged VLAN", "Tagged VLANs", "Peer", "Protected"],
                        [[p, w, u, t, pe, "yes" if pr else "no"] for p, w, u, t, pe, pr in m["ports"][dev]]), ""]
-    T += ["Unused ports: shut down, description `unused`. Ports 19-23 on sw-fN are spare.", "",
+    T += ["Unused ports: shut down, description `unused`. Spare ports on sw-fN: 19-23. Spare ports on sw-core: 21-24 and 16.", "",
           "## 5. Wi-Fi (Omada)", "",
           md_table(["SSID", "VLAN", "Zone", "APs", "Security", "Client isolation", "Rate limit"], ssid_rows(plan)),
           "", "AP management is on MGMT 10 (untagged on the AP port). Each AP port carries its own floor VLAN tagged. ap-lobby carries VLAN 40.", "",
@@ -324,8 +322,8 @@ def emit_docs(m):
           md_table(["Rule", "Source", "Destination", "Action", "Detail", "NAT", "Log"], policy_rows(plan)),
           "", "- `internet` = anything outside RFC1918. `rfc1918` = 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16.",
           "- GUEST deny to rfc1918 sits above GUEST allow to internet on purpose.",
-          "- Local-in (traffic to the firewall itself): DHCP and DNS from every VLAN except CCTV, NTP from CCTV, SSH/HTTPS admin only from MGMT and OWNER-VPN.",
-          "- Shapers are per-IP on the firewall (tenant 100/50, guest 20/10). Wired rooms also get a 100/50 limit on the switch port.",
+          "- Local-in (traffic to the firewall itself): DHCP on the DHCP VLANs, SSH/HTTPS admin and the NTP server only on the MGMT interface (as rendered in configs/). CCTV has no NTP source yet.",
+          "- Shapers are per-IP on the firewall (tenant 100/50, guest 20/10). No per-port limit is set on the switches (not in the rendered configs).",
           "- NAT: source NAT to the active WAN interface for every internet allow rule. No NAT for VPN traffic.", "",
           "## 7. WAN and VPN", "",
           f"- wan1: {plan['site']['isp']['primary']['name']}, {plan['site']['isp']['primary']['wan']}. wan2: {plan['site']['isp']['backup']['name']}, {plan['site']['isp']['backup']['wan']}.",

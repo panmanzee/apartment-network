@@ -79,4 +79,4 @@ R23 is the answer to complaint 1. The 6:1 ratio (60 x 100 / 1000) is a design ch
 | T13 Backup | R18 | check the backup folder and the off-server copy | look for files for fw, 6 switches and the controller | files exist and are dated within the last week |
 | T14 Port map check | R21 | pick 5 random rooms | find the room port from lld.md and test the wall jack | port and VLAN match the table |
 
-The lab in `lab/` is a software model of some of these tests. It does not replace the tests on real hardware. See `lab/` for which ones it covers.
+The lab in `lab/` is a software model of some of these tests. It does not replace the tests on real hardware. Lab coverage: T1 partly (one floor, no tenant-to-other-floor test), T2 wired, T4 without the portal, T5/T6 (8 s iperf3 on Linux tc, not FortiOS), T7 (WireGuard instead of IPsec, ping/TCP only), T8, T9, T11 partly (ICMP only). Not covered: T3, T10, T12, T13, T14.

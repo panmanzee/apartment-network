@@ -8,12 +8,12 @@ Source of truth for addresses and rules: `plan/ip-plan.yaml`. Details are in `ll
 
 | Decision | Choice | Why |
 |---|---|---|
-| Where inter-VLAN routing happens | On fw-edge (FortiGate). sw-core is layer 2 only. | Every VLAN gateway is on the firewall, so every rule is in one place and every cross-VLAN packet is logged. Fits R2-R13. |
-| What the transit /30 is | 10.20.0.0/30, fw-edge .1, sw-core .2, on VLAN 999 (native VLAN of the trunk). Used for link recovery, no user traffic. | The yaml has a transit net. With an L2 core nothing is routed over it. Mgmt of sw-core stays on VLAN 10 (10.20.10.2). If VLAN 10 breaks, the core can still reach the firewall. |
+| Where inter-VLAN routing happens | On fw-edge (FortiGate). sw-core is layer 2 only. | Every VLAN gateway is on the firewall, so every rule is in one place and denied traffic is logged in full and allowed traffic logs security events. Fits R2-R13. |
+| What the transit /30 is | 10.20.0.0/30, fw-edge .1, sw-core .2, in the yaml. Not used: the core is L2, so nothing is routed over it. VLAN 999 is an unused native/parking VLAN on the trunks, no user traffic. | The yaml has a transit net, but with an L2 core there is no place for it. sw-core is managed on VLAN 10 (10.20.10.2). |
 | Room isolation | Protected ports on the switches plus client isolation on Wi-Fi | One subnet per floor, so the switch must block room to room. R4. |
 | Tenant Wi-Fi | One SSID per floor, WPA2/WPA3 personal, client isolation | Simple for the owner. No RADIUS server to run. R15. |
 | Guest | Own SSID on ap-lobby, captive portal on Omada, VLAN 40 | R7-R9. |
-| Owner VPN | IPsec IKEv2 on fw-edge, pool 10.20.50.0/24 | The yaml says ipsec-or-wireguard. FortiGate does IPsec natively. The lab may use WireGuard to model it. |
+| Owner VPN | IPsec IKEv2 on fw-edge, pool 10.20.50.0/24 | The yaml says ipsec-or-wireguard. FortiGate does IPsec natively. The lab uses WireGuard to model it. |
 | WAN | Dual WAN, ISP-A primary, ISP-B backup, health check failover | R14. |
 | Monitoring | Zabbix on mon-01 (10.20.10.50), SNMPv3 | R17. mon-01 is not in the yaml, added here. |
 
@@ -23,7 +23,7 @@ Source of truth for addresses and rules: `plan/ip-plan.yaml`. Details are in `ll
 flowchart TB
   ISPA[ISP-A FTTx 1000/500] --- FW
   ISPB[ISP-B FTTx 500/500] --- FW
-  FW[fw-edge FortiGate<br/>gateways for all VLANs<br/>10.20.10.1] ---|trunk, native VLAN 999<br/>transit 10.20.0.0/30| CORE[sw-core L2<br/>10.20.10.2]
+  FW[fw-edge FortiGate<br/>gateways for all VLANs<br/>10.20.10.1] ---|LACP trunk, native VLAN 999 (unused)| CORE[sw-core L2<br/>10.20.10.2]
   CORE --- F1[sw-f1 .11]
   CORE --- F2[sw-f2 .12]
   CORE --- F3[sw-f3 .13]
@@ -41,7 +41,9 @@ flowchart TB
 
 Floors 2 to 5 are built the same way as floor 1. The mon-01 server plugs into a MGMT port on sw-core.
 
-Wiring: fw-edge `lan1` goes to sw-core Gi1/0/1 as a trunk. sw-core Gi1/0/2-6 go to Gi1/0/24 on sw-f1 to sw-f5. A floor is a star: switch in the floor cupboard, one cable per room, two APs, four cameras.
+Wiring (same as `configs/render.py` and `lld.md`): fw-edge `internal1` + `internal2` go to sw-core Gi1/0/1-2 as an LACP trunk (`lag-core`). sw-core Gi1/0/11-15 go to Gi1/0/24 on sw-f1 to sw-f5. Other core ports: 3 mon-01, 4 admin port, 5 nvr-01, 6 ap-lobby, 7-10 lobby cameras, 17-20 staff. A floor is a star: switch in the floor cupboard, one cable per room (Gi1/0/1-12), two APs (13-14), four cameras (15-18).
+
+BOM note: the BOM uses two 16-channel NVRs for 24 cameras (nvr-01 and nvr-02). The plan and these docs only list nvr-01, so nvr-02 is not in the address plan or the port map.
 
 ## 3. VLANs
 
@@ -52,7 +54,7 @@ Wiring: fw-edge `lan1` goes to sw-core Gi1/0/1 as a trunk. sw-core Gi1/0/2-6 go 
 | 30 | CCTV | 10.20.30.0/24 | 24 cameras and NVR. No DHCP, no internet. |
 | 40 | GUEST | 10.20.40.0/24 | lobby Wi-Fi only. |
 | 101-105 | TENANT-F1..F5 | 10.21.1.0/24 ... 10.21.5.0/24 | one per floor. |
-| 999 | TRANSIT | 10.20.0.0/30 | added in the docs. Trunk native VLAN. |
+| 999 | TRANSIT | 10.20.0.0/30 | added in the docs. Unused native/parking VLAN. The /30 is not used. |
 
 Full table with gateways: `ip-plan.md`.
 
@@ -68,14 +70,14 @@ Matrix from the yaml policy. A = allow, D = deny, blank = not allowed (default d
 | STAFF | | - | A tcp 443, 554 | | | A |
 | CCTV | | | - | | | D |
 | GUEST | | | | - | | A, 20/10 Mbps per client; private ranges D |
-| TENANT | D | D | D | D | D (also between floors) | A, 100/50 Mbps per room |
+| TENANT | D | D | D | D | D (also between floors) | A, 100/50 Mbps per device (see shaping note) |
 | OWNER-VPN | A | | A | | | |
 
 Rule order, NAT and logging are in `lld.md` section 6. Deny rules for private ranges come before internet allow rules.
 
 Not allowed means no rule, so the last rule (implicit deny, logged) drops it.
 
-Shaping note: a firewall sees IP addresses, not rooms. The firewall shaper is per IP address, so a room with three devices could use three times the limit. The wired port of each room also gets a 100/50 limit on the switch, so wired rooms are limited per room. On Wi-Fi the limit is per client. This is a known gap, written here on purpose.
+Shaping note: a firewall sees IP addresses, not rooms. The firewall shaper is per IP address, so a room with three devices could use three times the limit. There is no per-port limit on the switches (not in the rendered configs), so the limit is per device, not per room. This is a known gap, written here on purpose.
 
 ## 5. Wi-Fi (TP-Link Omada)
 
@@ -89,7 +91,7 @@ Shaping note: a firewall sees IP addresses, not rooms. The firewall shaper is pe
 
 - 24 cameras: 4 per floor on the floor switch (ports 15-18), 4 on sw-core (gate, parking, lobby, back).
 - All on VLAN 30, fixed addresses 10.20.30.101-124, NVR 10.20.30.10.
-- No internet for CCTV (R11). Time comes from the firewall NTP (local-in rule).
+- No internet for CCTV (R11). The firewall serves NTP on MGMT only (as rendered), so CCTV has no NTP source yet. Planned: NTP on the CCTV interface plus a local-in rule, not in the configs.
 - Staff view the NVR on TCP 443 and RTSP 554. Owner views it over the VPN. No port forward to the NVR from the internet.
 
 ## 7. Owner remote access
@@ -97,7 +99,7 @@ Shaping note: a firewall sees IP addresses, not rooms. The firewall shaper is pe
 - IPsec IKEv2, FortiClient or the phone's built-in client. Pool 10.20.50.0/24.
 - Split tunnel: only 10.20.10.0/24 and 10.20.30.0/24 go into the tunnel.
 - Needs a public IP on a WAN. Many home fibre lines in Thailand sit behind CGNAT. The owner has to ask the ISP for a public IP (or use the line that has one). The WAN address is DHCP, so DDNS is used for the name.
-- VPN rules and MFA: user account per person, no shared login.
+- One account per person, no shared login. MFA (FortiToken) is planned, not in the rendered config.
 
 ## 8. Monitoring (Zabbix)
 
