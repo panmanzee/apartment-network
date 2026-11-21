@@ -1,0 +1,8 @@
+---
+# copy to vault.yml and encrypt: ansible-vault encrypt group_vars/all/vault.yml
+vault_admin_pass: change-me
+vault_enable_pass: change-me
+vault_snmp_auth: change-me-auth-key
+vault_snmp_priv: change-me-priv-key
+vault_ipsec_psk: change-me-psk
+vault_owner_pass: change-me

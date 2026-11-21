@@ -1,0 +1,57 @@
+!
+service timestamps debug datetime msec localtime
+service timestamps log datetime msec localtime
+service password-encryption
+!
+hostname {{ host.name }}
+!
+aaa new-model
+aaa authentication login default local
+aaa authorization exec default local
+enable algorithm-type scrypt secret __ENABLE_PASS__
+username {{ site.admin_user }} privilege 15 algorithm-type scrypt secret __ADMIN_PASS__
+!
+clock timezone ICT 7 0
+no ip domain lookup
+ip domain name {{ site.domain }}
+ip ssh version 2
+ip ssh time-out 60
+ip ssh authentication-retries 3
+no ip http server
+no ip http secure-server
+!
+vtp mode transparent
+errdisable recovery cause bpduguard
+errdisable recovery cause psecure-violation
+errdisable recovery interval 300
+!
+ntp server {{ site.ntp_server }}
+!
+logging buffered 32768 informational
+logging host {{ site.syslog_host }}
+logging trap informational
+logging source-interface Vlan10
+!
+ip access-list standard ACL-MGMT
+ permit {{ mgmt.net }} {{ mgmt.wild }}
+ deny   any log
+!
+snmp-server view V-RO iso included
+snmp-server group G-NMS v3 priv read V-RO access ACL-MGMT
+snmp-server user {{ site.snmp_user }} G-NMS v3 auth sha __SNMP_AUTH__ priv aes 128 __SNMP_PRIV__
+snmp-server location {{ site.name }}, {{ host.location }}
+snmp-server contact {{ site.contact }}
+snmp-server enable traps snmp linkdown linkup
+snmp-server enable traps port-security
+snmp-server host {{ site.nms_host }} version 3 priv {{ site.snmp_user }}
+!
+banner motd ^C
+{{ site.banner }}
+^C
+!
+spanning-tree mode rapid-pvst
+spanning-tree extend system-id
+{% if host.stp_root %}
+spanning-tree vlan 1-4094 priority 4096
+{% endif %}
+!

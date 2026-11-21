@@ -7,3 +7,8 @@
 .terraform/
 __pycache__/
 *.pyc
+lab/clab-*/
+lab/.clab*
+configs/.venv/
+configs/.collections/
+.ipynb_checkpoints/

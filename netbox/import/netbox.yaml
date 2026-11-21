@@ -1,0 +1,1745 @@
+simulated: true
+site:
+  name: Baan Chalong Residence
+  slug: baan-chalong
+manufacturers:
+- Fortinet
+- Generic
+- TP-Link
+device_roles:
+- firewall
+- core-switch
+- access-switch
+- ap
+- nvr
+- camera
+- monitoring
+device_types:
+- manufacturer: Fortinet
+  model: Edge Firewall
+  role: firewall
+- manufacturer: TP-Link
+  model: Core Switch 24p
+  role: core-switch
+- manufacturer: TP-Link
+  model: Access Switch 24p
+  role: access-switch
+- manufacturer: TP-Link
+  model: Omada AP
+  role: ap
+- manufacturer: Generic
+  model: NVR
+  role: nvr
+- manufacturer: Generic
+  model: IP Camera
+  role: camera
+- manufacturer: Generic
+  model: Monitoring Server
+  role: monitoring
+vlans:
+- vid: 10
+  name: MGMT
+  desc: switches
+- vid: 20
+  name: STAFF
+  desc: office PCs
+- vid: 30
+  name: CCTV
+  desc: 24 IP cameras + NVR
+- vid: 40
+  name: GUEST
+  desc: lobby guest Wi-Fi
+- vid: 101
+  name: TENANT-F1
+  desc: floor 1 rooms 101-112
+- vid: 102
+  name: TENANT-F2
+  desc: floor 2 rooms 201-212
+- vid: 103
+  name: TENANT-F3
+  desc: floor 3 rooms 301-312
+- vid: 104
+  name: TENANT-F4
+  desc: floor 4 rooms 401-412
+- vid: 105
+  name: TENANT-F5
+  desc: floor 5 rooms 501-512
+- vid: 999
+  name: TRANSIT
+  desc: native VLAN on the fw-edge to sw-core trunk, carries the transit /30 only
+prefixes:
+- prefix: 10.20.10.0/24
+  vid: 10
+  desc: 'MGMT: switches'
+- prefix: 10.20.20.0/24
+  vid: 20
+  desc: 'STAFF: office PCs'
+- prefix: 10.20.30.0/24
+  vid: 30
+  desc: 'CCTV: 24 IP cameras + NVR'
+- prefix: 10.20.40.0/24
+  vid: 40
+  desc: 'GUEST: lobby guest Wi-Fi'
+- prefix: 10.21.1.0/24
+  vid: 101
+  desc: 'TENANT-F1: floor 1 rooms 101-112'
+- prefix: 10.21.2.0/24
+  vid: 102
+  desc: 'TENANT-F2: floor 2 rooms 201-212'
+- prefix: 10.21.3.0/24
+  vid: 103
+  desc: 'TENANT-F3: floor 3 rooms 301-312'
+- prefix: 10.21.4.0/24
+  vid: 104
+  desc: 'TENANT-F4: floor 4 rooms 401-412'
+- prefix: 10.21.5.0/24
+  vid: 105
+  desc: 'TENANT-F5: floor 5 rooms 501-512'
+- prefix: 10.20.0.0/30
+  vid: 999
+  desc: transit fw-edge .1 / sw-core .2
+- prefix: 10.20.50.0/24
+  vid: null
+  desc: owner remote access VPN pool
+devices:
+- name: fw-edge
+  role: firewall
+  mgmt_ip: 10.20.10.1
+- name: sw-core
+  role: core-switch
+  mgmt_ip: 10.20.10.2
+- name: sw-f1
+  role: access-switch
+  mgmt_ip: 10.20.10.11
+  floor: 1
+- name: sw-f2
+  role: access-switch
+  mgmt_ip: 10.20.10.12
+  floor: 2
+- name: sw-f3
+  role: access-switch
+  mgmt_ip: 10.20.10.13
+  floor: 3
+- name: sw-f4
+  role: access-switch
+  mgmt_ip: 10.20.10.14
+  floor: 4
+- name: sw-f5
+  role: access-switch
+  mgmt_ip: 10.20.10.15
+  floor: 5
+- name: nvr-01
+  role: nvr
+  mgmt_ip: 10.20.30.10
+- name: ap-f1-a
+  role: ap
+  mgmt_ip: 10.20.10.31
+  floor: 1
+- name: ap-f1-b
+  role: ap
+  mgmt_ip: 10.20.10.32
+  floor: 1
+- name: ap-f2-a
+  role: ap
+  mgmt_ip: 10.20.10.33
+  floor: 2
+- name: ap-f2-b
+  role: ap
+  mgmt_ip: 10.20.10.34
+  floor: 2
+- name: ap-f3-a
+  role: ap
+  mgmt_ip: 10.20.10.35
+  floor: 3
+- name: ap-f3-b
+  role: ap
+  mgmt_ip: 10.20.10.36
+  floor: 3
+- name: ap-f4-a
+  role: ap
+  mgmt_ip: 10.20.10.37
+  floor: 4
+- name: ap-f4-b
+  role: ap
+  mgmt_ip: 10.20.10.38
+  floor: 4
+- name: ap-f5-a
+  role: ap
+  mgmt_ip: 10.20.10.39
+  floor: 5
+- name: ap-f5-b
+  role: ap
+  mgmt_ip: 10.20.10.40
+  floor: 5
+- name: ap-lobby
+  role: ap
+  mgmt_ip: 10.20.10.41
+  floor: 0
+- name: mon-01
+  role: monitoring
+  mgmt_ip: 10.20.10.50
+- name: cam-f1-1
+  role: camera
+  mgmt_ip: 10.20.30.101
+  floor: 1
+- name: cam-f1-2
+  role: camera
+  mgmt_ip: 10.20.30.102
+  floor: 1
+- name: cam-f1-3
+  role: camera
+  mgmt_ip: 10.20.30.103
+  floor: 1
+- name: cam-f1-4
+  role: camera
+  mgmt_ip: 10.20.30.104
+  floor: 1
+- name: cam-f2-1
+  role: camera
+  mgmt_ip: 10.20.30.105
+  floor: 2
+- name: cam-f2-2
+  role: camera
+  mgmt_ip: 10.20.30.106
+  floor: 2
+- name: cam-f2-3
+  role: camera
+  mgmt_ip: 10.20.30.107
+  floor: 2
+- name: cam-f2-4
+  role: camera
+  mgmt_ip: 10.20.30.108
+  floor: 2
+- name: cam-f3-1
+  role: camera
+  mgmt_ip: 10.20.30.109
+  floor: 3
+- name: cam-f3-2
+  role: camera
+  mgmt_ip: 10.20.30.110
+  floor: 3
+- name: cam-f3-3
+  role: camera
+  mgmt_ip: 10.20.30.111
+  floor: 3
+- name: cam-f3-4
+  role: camera
+  mgmt_ip: 10.20.30.112
+  floor: 3
+- name: cam-f4-1
+  role: camera
+  mgmt_ip: 10.20.30.113
+  floor: 4
+- name: cam-f4-2
+  role: camera
+  mgmt_ip: 10.20.30.114
+  floor: 4
+- name: cam-f4-3
+  role: camera
+  mgmt_ip: 10.20.30.115
+  floor: 4
+- name: cam-f4-4
+  role: camera
+  mgmt_ip: 10.20.30.116
+  floor: 4
+- name: cam-f5-1
+  role: camera
+  mgmt_ip: 10.20.30.117
+  floor: 5
+- name: cam-f5-2
+  role: camera
+  mgmt_ip: 10.20.30.118
+  floor: 5
+- name: cam-f5-3
+  role: camera
+  mgmt_ip: 10.20.30.119
+  floor: 5
+- name: cam-f5-4
+  role: camera
+  mgmt_ip: 10.20.30.120
+  floor: 5
+- name: cam-core-1
+  role: camera
+  mgmt_ip: 10.20.30.121
+  floor: 0
+- name: cam-core-2
+  role: camera
+  mgmt_ip: 10.20.30.122
+  floor: 0
+- name: cam-core-3
+  role: camera
+  mgmt_ip: 10.20.30.123
+  floor: 0
+- name: cam-core-4
+  role: camera
+  mgmt_ip: 10.20.30.124
+  floor: 0
+interfaces:
+- device: fw-edge
+  name: wan1
+  type: 1000base-t
+  mode: ''
+  desc: ISP-A FTTx 1000/500
+- device: fw-edge
+  name: wan2
+  type: 1000base-t
+  mode: ''
+  desc: ISP-B FTTx 500/500
+- device: fw-edge
+  name: lan1
+  type: 1000base-t
+  mode: tagged
+  desc: trunk to sw-core Gi1/0/1; untagged 999; tagged 10,20,30,40,101-105
+  untagged: 999
+  tagged: 10,20,30,40,101-105
+- device: fw-edge
+  name: vlan10
+  type: virtual
+  mode: ''
+  desc: gateway MGMT
+- device: fw-edge
+  name: vlan20
+  type: virtual
+  mode: ''
+  desc: gateway STAFF
+- device: fw-edge
+  name: vlan30
+  type: virtual
+  mode: ''
+  desc: gateway CCTV
+- device: fw-edge
+  name: vlan40
+  type: virtual
+  mode: ''
+  desc: gateway GUEST
+- device: fw-edge
+  name: vlan101
+  type: virtual
+  mode: ''
+  desc: gateway TENANT-F1
+- device: fw-edge
+  name: vlan102
+  type: virtual
+  mode: ''
+  desc: gateway TENANT-F2
+- device: fw-edge
+  name: vlan103
+  type: virtual
+  mode: ''
+  desc: gateway TENANT-F3
+- device: fw-edge
+  name: vlan104
+  type: virtual
+  mode: ''
+  desc: gateway TENANT-F4
+- device: fw-edge
+  name: vlan105
+  type: virtual
+  mode: ''
+  desc: gateway TENANT-F5
+- device: sw-core
+  name: vlan10
+  type: virtual
+  mode: ''
+  desc: management
+- device: sw-f1
+  name: vlan10
+  type: virtual
+  mode: ''
+  desc: management
+- device: sw-f2
+  name: vlan10
+  type: virtual
+  mode: ''
+  desc: management
+- device: sw-f3
+  name: vlan10
+  type: virtual
+  mode: ''
+  desc: management
+- device: sw-f4
+  name: vlan10
+  type: virtual
+  mode: ''
+  desc: management
+- device: sw-f5
+  name: vlan10
+  type: virtual
+  mode: ''
+  desc: management
+- device: sw-core
+  name: Gi1/0/1
+  type: 1000base-t
+  mode: tagged
+  desc: trunk to fw-edge; untagged 999; tagged 10,20,30,40,101-105
+  untagged: 999
+  tagged: 10,20,30,40,101-105
+- device: sw-core
+  name: Gi1/0/2
+  type: 1000base-t
+  mode: tagged
+  desc: uplink sw-f1; untagged 10; tagged 30,101
+  untagged: 10
+  tagged: 30,101
+- device: sw-core
+  name: Gi1/0/3
+  type: 1000base-t
+  mode: tagged
+  desc: uplink sw-f2; untagged 10; tagged 30,102
+  untagged: 10
+  tagged: 30,102
+- device: sw-core
+  name: Gi1/0/4
+  type: 1000base-t
+  mode: tagged
+  desc: uplink sw-f3; untagged 10; tagged 30,103
+  untagged: 10
+  tagged: 30,103
+- device: sw-core
+  name: Gi1/0/5
+  type: 1000base-t
+  mode: tagged
+  desc: uplink sw-f4; untagged 10; tagged 30,104
+  untagged: 10
+  tagged: 30,104
+- device: sw-core
+  name: Gi1/0/6
+  type: 1000base-t
+  mode: tagged
+  desc: uplink sw-f5; untagged 10; tagged 30,105
+  untagged: 10
+  tagged: 30,105
+- device: sw-core
+  name: Gi1/0/7
+  type: 1000base-t
+  mode: access
+  desc: nvr-01; untagged 30
+  untagged: 30
+  tagged: ''
+- device: sw-core
+  name: Gi1/0/8
+  type: 1000base-t
+  mode: tagged
+  desc: ap-lobby; untagged 10; tagged 40; protected
+  untagged: 10
+  tagged: '40'
+- device: sw-core
+  name: Gi1/0/9
+  type: 1000base-t
+  mode: access
+  desc: cam-core-1 (gate); untagged 30; protected
+  untagged: 30
+  tagged: ''
+- device: sw-core
+  name: Gi1/0/10
+  type: 1000base-t
+  mode: access
+  desc: cam-core-2 (parking); untagged 30; protected
+  untagged: 30
+  tagged: ''
+- device: sw-core
+  name: Gi1/0/11
+  type: 1000base-t
+  mode: access
+  desc: cam-core-3 (lobby); untagged 30; protected
+  untagged: 30
+  tagged: ''
+- device: sw-core
+  name: Gi1/0/12
+  type: 1000base-t
+  mode: access
+  desc: cam-core-4 (back); untagged 30; protected
+  untagged: 30
+  tagged: ''
+- device: sw-core
+  name: Gi1/0/13
+  type: 1000base-t
+  mode: access
+  desc: mon-01; untagged 10
+  untagged: 10
+  tagged: ''
+- device: sw-core
+  name: Gi1/0/14
+  type: 1000base-t
+  mode: access
+  desc: staff office; untagged 20
+  untagged: 20
+  tagged: ''
+- device: sw-core
+  name: Gi1/0/15
+  type: 1000base-t
+  mode: access
+  desc: staff office; untagged 20
+  untagged: 20
+  tagged: ''
+- device: sw-core
+  name: Gi1/0/16
+  type: 1000base-t
+  mode: access
+  desc: staff office; untagged 20
+  untagged: 20
+  tagged: ''
+- device: sw-core
+  name: Gi1/0/17
+  type: 1000base-t
+  mode: access
+  desc: staff office; untagged 20
+  untagged: 20
+  tagged: ''
+- device: sw-core
+  name: Gi1/0/18
+  type: 1000base-t
+  mode: access
+  desc: staff office; untagged 20
+  untagged: 20
+  tagged: ''
+- device: sw-core
+  name: Gi1/0/24
+  type: 1000base-t
+  mode: access
+  desc: admin laptop (MGMT); untagged 10
+  untagged: 10
+  tagged: ''
+- device: sw-f1
+  name: Gi1/0/1
+  type: 1000base-t
+  mode: access
+  desc: room 101; untagged 101; protected
+  untagged: 101
+  tagged: ''
+- device: sw-f1
+  name: Gi1/0/2
+  type: 1000base-t
+  mode: access
+  desc: room 102; untagged 101; protected
+  untagged: 101
+  tagged: ''
+- device: sw-f1
+  name: Gi1/0/3
+  type: 1000base-t
+  mode: access
+  desc: room 103; untagged 101; protected
+  untagged: 101
+  tagged: ''
+- device: sw-f1
+  name: Gi1/0/4
+  type: 1000base-t
+  mode: access
+  desc: room 104; untagged 101; protected
+  untagged: 101
+  tagged: ''
+- device: sw-f1
+  name: Gi1/0/5
+  type: 1000base-t
+  mode: access
+  desc: room 105; untagged 101; protected
+  untagged: 101
+  tagged: ''
+- device: sw-f1
+  name: Gi1/0/6
+  type: 1000base-t
+  mode: access
+  desc: room 106; untagged 101; protected
+  untagged: 101
+  tagged: ''
+- device: sw-f1
+  name: Gi1/0/7
+  type: 1000base-t
+  mode: access
+  desc: room 107; untagged 101; protected
+  untagged: 101
+  tagged: ''
+- device: sw-f1
+  name: Gi1/0/8
+  type: 1000base-t
+  mode: access
+  desc: room 108; untagged 101; protected
+  untagged: 101
+  tagged: ''
+- device: sw-f1
+  name: Gi1/0/9
+  type: 1000base-t
+  mode: access
+  desc: room 109; untagged 101; protected
+  untagged: 101
+  tagged: ''
+- device: sw-f1
+  name: Gi1/0/10
+  type: 1000base-t
+  mode: access
+  desc: room 110; untagged 101; protected
+  untagged: 101
+  tagged: ''
+- device: sw-f1
+  name: Gi1/0/11
+  type: 1000base-t
+  mode: access
+  desc: room 111; untagged 101; protected
+  untagged: 101
+  tagged: ''
+- device: sw-f1
+  name: Gi1/0/12
+  type: 1000base-t
+  mode: access
+  desc: room 112; untagged 101; protected
+  untagged: 101
+  tagged: ''
+- device: sw-f1
+  name: Gi1/0/13
+  type: 1000base-t
+  mode: tagged
+  desc: ap-f1-a; untagged 10; tagged 101; protected
+  untagged: 10
+  tagged: '101'
+- device: sw-f1
+  name: Gi1/0/14
+  type: 1000base-t
+  mode: tagged
+  desc: ap-f1-b; untagged 10; tagged 101; protected
+  untagged: 10
+  tagged: '101'
+- device: sw-f1
+  name: Gi1/0/15
+  type: 1000base-t
+  mode: access
+  desc: cam-f1-1; untagged 30; protected
+  untagged: 30
+  tagged: ''
+- device: sw-f1
+  name: Gi1/0/16
+  type: 1000base-t
+  mode: access
+  desc: cam-f1-2; untagged 30; protected
+  untagged: 30
+  tagged: ''
+- device: sw-f1
+  name: Gi1/0/17
+  type: 1000base-t
+  mode: access
+  desc: cam-f1-3; untagged 30; protected
+  untagged: 30
+  tagged: ''
+- device: sw-f1
+  name: Gi1/0/18
+  type: 1000base-t
+  mode: access
+  desc: cam-f1-4; untagged 30; protected
+  untagged: 30
+  tagged: ''
+- device: sw-f1
+  name: Gi1/0/24
+  type: 1000base-t
+  mode: tagged
+  desc: uplink to sw-core; untagged 10; tagged 30,101
+  untagged: 10
+  tagged: 30,101
+- device: sw-f2
+  name: Gi1/0/1
+  type: 1000base-t
+  mode: access
+  desc: room 201; untagged 102; protected
+  untagged: 102
+  tagged: ''
+- device: sw-f2
+  name: Gi1/0/2
+  type: 1000base-t
+  mode: access
+  desc: room 202; untagged 102; protected
+  untagged: 102
+  tagged: ''
+- device: sw-f2
+  name: Gi1/0/3
+  type: 1000base-t
+  mode: access
+  desc: room 203; untagged 102; protected
+  untagged: 102
+  tagged: ''
+- device: sw-f2
+  name: Gi1/0/4
+  type: 1000base-t
+  mode: access
+  desc: room 204; untagged 102; protected
+  untagged: 102
+  tagged: ''
+- device: sw-f2
+  name: Gi1/0/5
+  type: 1000base-t
+  mode: access
+  desc: room 205; untagged 102; protected
+  untagged: 102
+  tagged: ''
+- device: sw-f2
+  name: Gi1/0/6
+  type: 1000base-t
+  mode: access
+  desc: room 206; untagged 102; protected
+  untagged: 102
+  tagged: ''
+- device: sw-f2
+  name: Gi1/0/7
+  type: 1000base-t
+  mode: access
+  desc: room 207; untagged 102; protected
+  untagged: 102
+  tagged: ''
+- device: sw-f2
+  name: Gi1/0/8
+  type: 1000base-t
+  mode: access
+  desc: room 208; untagged 102; protected
+  untagged: 102
+  tagged: ''
+- device: sw-f2
+  name: Gi1/0/9
+  type: 1000base-t
+  mode: access
+  desc: room 209; untagged 102; protected
+  untagged: 102
+  tagged: ''
+- device: sw-f2
+  name: Gi1/0/10
+  type: 1000base-t
+  mode: access
+  desc: room 210; untagged 102; protected
+  untagged: 102
+  tagged: ''
+- device: sw-f2
+  name: Gi1/0/11
+  type: 1000base-t
+  mode: access
+  desc: room 211; untagged 102; protected
+  untagged: 102
+  tagged: ''
+- device: sw-f2
+  name: Gi1/0/12
+  type: 1000base-t
+  mode: access
+  desc: room 212; untagged 102; protected
+  untagged: 102
+  tagged: ''
+- device: sw-f2
+  name: Gi1/0/13
+  type: 1000base-t
+  mode: tagged
+  desc: ap-f2-a; untagged 10; tagged 102; protected
+  untagged: 10
+  tagged: '102'
+- device: sw-f2
+  name: Gi1/0/14
+  type: 1000base-t
+  mode: tagged
+  desc: ap-f2-b; untagged 10; tagged 102; protected
+  untagged: 10
+  tagged: '102'
+- device: sw-f2
+  name: Gi1/0/15
+  type: 1000base-t
+  mode: access
+  desc: cam-f2-1; untagged 30; protected
+  untagged: 30
+  tagged: ''
+- device: sw-f2
+  name: Gi1/0/16
+  type: 1000base-t
+  mode: access
+  desc: cam-f2-2; untagged 30; protected
+  untagged: 30
+  tagged: ''
+- device: sw-f2
+  name: Gi1/0/17
+  type: 1000base-t
+  mode: access
+  desc: cam-f2-3; untagged 30; protected
+  untagged: 30
+  tagged: ''
+- device: sw-f2
+  name: Gi1/0/18
+  type: 1000base-t
+  mode: access
+  desc: cam-f2-4; untagged 30; protected
+  untagged: 30
+  tagged: ''
+- device: sw-f2
+  name: Gi1/0/24
+  type: 1000base-t
+  mode: tagged
+  desc: uplink to sw-core; untagged 10; tagged 30,102
+  untagged: 10
+  tagged: 30,102
+- device: sw-f3
+  name: Gi1/0/1
+  type: 1000base-t
+  mode: access
+  desc: room 301; untagged 103; protected
+  untagged: 103
+  tagged: ''
+- device: sw-f3
+  name: Gi1/0/2
+  type: 1000base-t
+  mode: access
+  desc: room 302; untagged 103; protected
+  untagged: 103
+  tagged: ''
+- device: sw-f3
+  name: Gi1/0/3
+  type: 1000base-t
+  mode: access
+  desc: room 303; untagged 103; protected
+  untagged: 103
+  tagged: ''
+- device: sw-f3
+  name: Gi1/0/4
+  type: 1000base-t
+  mode: access
+  desc: room 304; untagged 103; protected
+  untagged: 103
+  tagged: ''
+- device: sw-f3
+  name: Gi1/0/5
+  type: 1000base-t
+  mode: access
+  desc: room 305; untagged 103; protected
+  untagged: 103
+  tagged: ''
+- device: sw-f3
+  name: Gi1/0/6
+  type: 1000base-t
+  mode: access
+  desc: room 306; untagged 103; protected
+  untagged: 103
+  tagged: ''
+- device: sw-f3
+  name: Gi1/0/7
+  type: 1000base-t
+  mode: access
+  desc: room 307; untagged 103; protected
+  untagged: 103
+  tagged: ''
+- device: sw-f3
+  name: Gi1/0/8
+  type: 1000base-t
+  mode: access
+  desc: room 308; untagged 103; protected
+  untagged: 103
+  tagged: ''
+- device: sw-f3
+  name: Gi1/0/9
+  type: 1000base-t
+  mode: access
+  desc: room 309; untagged 103; protected
+  untagged: 103
+  tagged: ''
+- device: sw-f3
+  name: Gi1/0/10
+  type: 1000base-t
+  mode: access
+  desc: room 310; untagged 103; protected
+  untagged: 103
+  tagged: ''
+- device: sw-f3
+  name: Gi1/0/11
+  type: 1000base-t
+  mode: access
+  desc: room 311; untagged 103; protected
+  untagged: 103
+  tagged: ''
+- device: sw-f3
+  name: Gi1/0/12
+  type: 1000base-t
+  mode: access
+  desc: room 312; untagged 103; protected
+  untagged: 103
+  tagged: ''
+- device: sw-f3
+  name: Gi1/0/13
+  type: 1000base-t
+  mode: tagged
+  desc: ap-f3-a; untagged 10; tagged 103; protected
+  untagged: 10
+  tagged: '103'
+- device: sw-f3
+  name: Gi1/0/14
+  type: 1000base-t
+  mode: tagged
+  desc: ap-f3-b; untagged 10; tagged 103; protected
+  untagged: 10
+  tagged: '103'
+- device: sw-f3
+  name: Gi1/0/15
+  type: 1000base-t
+  mode: access
+  desc: cam-f3-1; untagged 30; protected
+  untagged: 30
+  tagged: ''
+- device: sw-f3
+  name: Gi1/0/16
+  type: 1000base-t
+  mode: access
+  desc: cam-f3-2; untagged 30; protected
+  untagged: 30
+  tagged: ''
+- device: sw-f3
+  name: Gi1/0/17
+  type: 1000base-t
+  mode: access
+  desc: cam-f3-3; untagged 30; protected
+  untagged: 30
+  tagged: ''
+- device: sw-f3
+  name: Gi1/0/18
+  type: 1000base-t
+  mode: access
+  desc: cam-f3-4; untagged 30; protected
+  untagged: 30
+  tagged: ''
+- device: sw-f3
+  name: Gi1/0/24
+  type: 1000base-t
+  mode: tagged
+  desc: uplink to sw-core; untagged 10; tagged 30,103
+  untagged: 10
+  tagged: 30,103
+- device: sw-f4
+  name: Gi1/0/1
+  type: 1000base-t
+  mode: access
+  desc: room 401; untagged 104; protected
+  untagged: 104
+  tagged: ''
+- device: sw-f4
+  name: Gi1/0/2
+  type: 1000base-t
+  mode: access
+  desc: room 402; untagged 104; protected
+  untagged: 104
+  tagged: ''
+- device: sw-f4
+  name: Gi1/0/3
+  type: 1000base-t
+  mode: access
+  desc: room 403; untagged 104; protected
+  untagged: 104
+  tagged: ''
+- device: sw-f4
+  name: Gi1/0/4
+  type: 1000base-t
+  mode: access
+  desc: room 404; untagged 104; protected
+  untagged: 104
+  tagged: ''
+- device: sw-f4
+  name: Gi1/0/5
+  type: 1000base-t
+  mode: access
+  desc: room 405; untagged 104; protected
+  untagged: 104
+  tagged: ''
+- device: sw-f4
+  name: Gi1/0/6
+  type: 1000base-t
+  mode: access
+  desc: room 406; untagged 104; protected
+  untagged: 104
+  tagged: ''
+- device: sw-f4
+  name: Gi1/0/7
+  type: 1000base-t
+  mode: access
+  desc: room 407; untagged 104; protected
+  untagged: 104
+  tagged: ''
+- device: sw-f4
+  name: Gi1/0/8
+  type: 1000base-t
+  mode: access
+  desc: room 408; untagged 104; protected
+  untagged: 104
+  tagged: ''
+- device: sw-f4
+  name: Gi1/0/9
+  type: 1000base-t
+  mode: access
+  desc: room 409; untagged 104; protected
+  untagged: 104
+  tagged: ''
+- device: sw-f4
+  name: Gi1/0/10
+  type: 1000base-t
+  mode: access
+  desc: room 410; untagged 104; protected
+  untagged: 104
+  tagged: ''
+- device: sw-f4
+  name: Gi1/0/11
+  type: 1000base-t
+  mode: access
+  desc: room 411; untagged 104; protected
+  untagged: 104
+  tagged: ''
+- device: sw-f4
+  name: Gi1/0/12
+  type: 1000base-t
+  mode: access
+  desc: room 412; untagged 104; protected
+  untagged: 104
+  tagged: ''
+- device: sw-f4
+  name: Gi1/0/13
+  type: 1000base-t
+  mode: tagged
+  desc: ap-f4-a; untagged 10; tagged 104; protected
+  untagged: 10
+  tagged: '104'
+- device: sw-f4
+  name: Gi1/0/14
+  type: 1000base-t
+  mode: tagged
+  desc: ap-f4-b; untagged 10; tagged 104; protected
+  untagged: 10
+  tagged: '104'
+- device: sw-f4
+  name: Gi1/0/15
+  type: 1000base-t
+  mode: access
+  desc: cam-f4-1; untagged 30; protected
+  untagged: 30
+  tagged: ''
+- device: sw-f4
+  name: Gi1/0/16
+  type: 1000base-t
+  mode: access
+  desc: cam-f4-2; untagged 30; protected
+  untagged: 30
+  tagged: ''
+- device: sw-f4
+  name: Gi1/0/17
+  type: 1000base-t
+  mode: access
+  desc: cam-f4-3; untagged 30; protected
+  untagged: 30
+  tagged: ''
+- device: sw-f4
+  name: Gi1/0/18
+  type: 1000base-t
+  mode: access
+  desc: cam-f4-4; untagged 30; protected
+  untagged: 30
+  tagged: ''
+- device: sw-f4
+  name: Gi1/0/24
+  type: 1000base-t
+  mode: tagged
+  desc: uplink to sw-core; untagged 10; tagged 30,104
+  untagged: 10
+  tagged: 30,104
+- device: sw-f5
+  name: Gi1/0/1
+  type: 1000base-t
+  mode: access
+  desc: room 501; untagged 105; protected
+  untagged: 105
+  tagged: ''
+- device: sw-f5
+  name: Gi1/0/2
+  type: 1000base-t
+  mode: access
+  desc: room 502; untagged 105; protected
+  untagged: 105
+  tagged: ''
+- device: sw-f5
+  name: Gi1/0/3
+  type: 1000base-t
+  mode: access
+  desc: room 503; untagged 105; protected
+  untagged: 105
+  tagged: ''
+- device: sw-f5
+  name: Gi1/0/4
+  type: 1000base-t
+  mode: access
+  desc: room 504; untagged 105; protected
+  untagged: 105
+  tagged: ''
+- device: sw-f5
+  name: Gi1/0/5
+  type: 1000base-t
+  mode: access
+  desc: room 505; untagged 105; protected
+  untagged: 105
+  tagged: ''
+- device: sw-f5
+  name: Gi1/0/6
+  type: 1000base-t
+  mode: access
+  desc: room 506; untagged 105; protected
+  untagged: 105
+  tagged: ''
+- device: sw-f5
+  name: Gi1/0/7
+  type: 1000base-t
+  mode: access
+  desc: room 507; untagged 105; protected
+  untagged: 105
+  tagged: ''
+- device: sw-f5
+  name: Gi1/0/8
+  type: 1000base-t
+  mode: access
+  desc: room 508; untagged 105; protected
+  untagged: 105
+  tagged: ''
+- device: sw-f5
+  name: Gi1/0/9
+  type: 1000base-t
+  mode: access
+  desc: room 509; untagged 105; protected
+  untagged: 105
+  tagged: ''
+- device: sw-f5
+  name: Gi1/0/10
+  type: 1000base-t
+  mode: access
+  desc: room 510; untagged 105; protected
+  untagged: 105
+  tagged: ''
+- device: sw-f5
+  name: Gi1/0/11
+  type: 1000base-t
+  mode: access
+  desc: room 511; untagged 105; protected
+  untagged: 105
+  tagged: ''
+- device: sw-f5
+  name: Gi1/0/12
+  type: 1000base-t
+  mode: access
+  desc: room 512; untagged 105; protected
+  untagged: 105
+  tagged: ''
+- device: sw-f5
+  name: Gi1/0/13
+  type: 1000base-t
+  mode: tagged
+  desc: ap-f5-a; untagged 10; tagged 105; protected
+  untagged: 10
+  tagged: '105'
+- device: sw-f5
+  name: Gi1/0/14
+  type: 1000base-t
+  mode: tagged
+  desc: ap-f5-b; untagged 10; tagged 105; protected
+  untagged: 10
+  tagged: '105'
+- device: sw-f5
+  name: Gi1/0/15
+  type: 1000base-t
+  mode: access
+  desc: cam-f5-1; untagged 30; protected
+  untagged: 30
+  tagged: ''
+- device: sw-f5
+  name: Gi1/0/16
+  type: 1000base-t
+  mode: access
+  desc: cam-f5-2; untagged 30; protected
+  untagged: 30
+  tagged: ''
+- device: sw-f5
+  name: Gi1/0/17
+  type: 1000base-t
+  mode: access
+  desc: cam-f5-3; untagged 30; protected
+  untagged: 30
+  tagged: ''
+- device: sw-f5
+  name: Gi1/0/18
+  type: 1000base-t
+  mode: access
+  desc: cam-f5-4; untagged 30; protected
+  untagged: 30
+  tagged: ''
+- device: sw-f5
+  name: Gi1/0/24
+  type: 1000base-t
+  mode: tagged
+  desc: uplink to sw-core; untagged 10; tagged 30,105
+  untagged: 10
+  tagged: 30,105
+- device: nvr-01
+  name: eth0
+  type: 1000base-t
+  mode: ''
+  desc: uplink
+- device: ap-f1-a
+  name: eth0
+  type: 1000base-t
+  mode: ''
+  desc: uplink
+- device: ap-f1-b
+  name: eth0
+  type: 1000base-t
+  mode: ''
+  desc: uplink
+- device: ap-f2-a
+  name: eth0
+  type: 1000base-t
+  mode: ''
+  desc: uplink
+- device: ap-f2-b
+  name: eth0
+  type: 1000base-t
+  mode: ''
+  desc: uplink
+- device: ap-f3-a
+  name: eth0
+  type: 1000base-t
+  mode: ''
+  desc: uplink
+- device: ap-f3-b
+  name: eth0
+  type: 1000base-t
+  mode: ''
+  desc: uplink
+- device: ap-f4-a
+  name: eth0
+  type: 1000base-t
+  mode: ''
+  desc: uplink
+- device: ap-f4-b
+  name: eth0
+  type: 1000base-t
+  mode: ''
+  desc: uplink
+- device: ap-f5-a
+  name: eth0
+  type: 1000base-t
+  mode: ''
+  desc: uplink
+- device: ap-f5-b
+  name: eth0
+  type: 1000base-t
+  mode: ''
+  desc: uplink
+- device: ap-lobby
+  name: eth0
+  type: 1000base-t
+  mode: ''
+  desc: uplink
+- device: mon-01
+  name: eth0
+  type: 1000base-t
+  mode: ''
+  desc: uplink
+- device: cam-f1-1
+  name: eth0
+  type: 1000base-t
+  mode: ''
+  desc: uplink
+- device: cam-f1-2
+  name: eth0
+  type: 1000base-t
+  mode: ''
+  desc: uplink
+- device: cam-f1-3
+  name: eth0
+  type: 1000base-t
+  mode: ''
+  desc: uplink
+- device: cam-f1-4
+  name: eth0
+  type: 1000base-t
+  mode: ''
+  desc: uplink
+- device: cam-f2-1
+  name: eth0
+  type: 1000base-t
+  mode: ''
+  desc: uplink
+- device: cam-f2-2
+  name: eth0
+  type: 1000base-t
+  mode: ''
+  desc: uplink
+- device: cam-f2-3
+  name: eth0
+  type: 1000base-t
+  mode: ''
+  desc: uplink
+- device: cam-f2-4
+  name: eth0
+  type: 1000base-t
+  mode: ''
+  desc: uplink
+- device: cam-f3-1
+  name: eth0
+  type: 1000base-t
+  mode: ''
+  desc: uplink
+- device: cam-f3-2
+  name: eth0
+  type: 1000base-t
+  mode: ''
+  desc: uplink
+- device: cam-f3-3
+  name: eth0
+  type: 1000base-t
+  mode: ''
+  desc: uplink
+- device: cam-f3-4
+  name: eth0
+  type: 1000base-t
+  mode: ''
+  desc: uplink
+- device: cam-f4-1
+  name: eth0
+  type: 1000base-t
+  mode: ''
+  desc: uplink
+- device: cam-f4-2
+  name: eth0
+  type: 1000base-t
+  mode: ''
+  desc: uplink
+- device: cam-f4-3
+  name: eth0
+  type: 1000base-t
+  mode: ''
+  desc: uplink
+- device: cam-f4-4
+  name: eth0
+  type: 1000base-t
+  mode: ''
+  desc: uplink
+- device: cam-f5-1
+  name: eth0
+  type: 1000base-t
+  mode: ''
+  desc: uplink
+- device: cam-f5-2
+  name: eth0
+  type: 1000base-t
+  mode: ''
+  desc: uplink
+- device: cam-f5-3
+  name: eth0
+  type: 1000base-t
+  mode: ''
+  desc: uplink
+- device: cam-f5-4
+  name: eth0
+  type: 1000base-t
+  mode: ''
+  desc: uplink
+- device: cam-core-1
+  name: eth0
+  type: 1000base-t
+  mode: ''
+  desc: uplink
+- device: cam-core-2
+  name: eth0
+  type: 1000base-t
+  mode: ''
+  desc: uplink
+- device: cam-core-3
+  name: eth0
+  type: 1000base-t
+  mode: ''
+  desc: uplink
+- device: cam-core-4
+  name: eth0
+  type: 1000base-t
+  mode: ''
+  desc: uplink
+ip_addresses:
+- address: 10.20.10.1/24
+  device: fw-edge
+  iface: vlan10
+  dns: ''
+  status: active
+  desc: gateway MGMT
+  primary: true
+- address: 10.20.20.1/24
+  device: fw-edge
+  iface: vlan20
+  dns: ''
+  status: active
+  desc: gateway STAFF
+  primary: false
+- address: 10.20.30.1/24
+  device: fw-edge
+  iface: vlan30
+  dns: ''
+  status: active
+  desc: gateway CCTV
+  primary: false
+- address: 10.20.40.1/24
+  device: fw-edge
+  iface: vlan40
+  dns: ''
+  status: active
+  desc: gateway GUEST
+  primary: false
+- address: 10.21.1.1/24
+  device: fw-edge
+  iface: vlan101
+  dns: ''
+  status: active
+  desc: gateway TENANT-F1
+  primary: false
+- address: 10.21.2.1/24
+  device: fw-edge
+  iface: vlan102
+  dns: ''
+  status: active
+  desc: gateway TENANT-F2
+  primary: false
+- address: 10.21.3.1/24
+  device: fw-edge
+  iface: vlan103
+  dns: ''
+  status: active
+  desc: gateway TENANT-F3
+  primary: false
+- address: 10.21.4.1/24
+  device: fw-edge
+  iface: vlan104
+  dns: ''
+  status: active
+  desc: gateway TENANT-F4
+  primary: false
+- address: 10.21.5.1/24
+  device: fw-edge
+  iface: vlan105
+  dns: ''
+  status: active
+  desc: gateway TENANT-F5
+  primary: false
+- address: 10.20.0.1/30
+  device: fw-edge
+  iface: lan1
+  dns: ''
+  status: active
+  desc: transit
+  primary: false
+- address: 10.20.0.2/30
+  device: sw-core
+  iface: Gi1/0/1
+  dns: ''
+  status: active
+  desc: transit
+  primary: false
+- address: 10.20.10.2/24
+  device: sw-core
+  iface: vlan10
+  dns: sw-core.baan-chalong.lan
+  status: active
+  desc: management
+  primary: true
+- address: 10.20.10.11/24
+  device: sw-f1
+  iface: vlan10
+  dns: sw-f1.baan-chalong.lan
+  status: active
+  desc: management
+  primary: true
+- address: 10.20.10.12/24
+  device: sw-f2
+  iface: vlan10
+  dns: sw-f2.baan-chalong.lan
+  status: active
+  desc: management
+  primary: true
+- address: 10.20.10.13/24
+  device: sw-f3
+  iface: vlan10
+  dns: sw-f3.baan-chalong.lan
+  status: active
+  desc: management
+  primary: true
+- address: 10.20.10.14/24
+  device: sw-f4
+  iface: vlan10
+  dns: sw-f4.baan-chalong.lan
+  status: active
+  desc: management
+  primary: true
+- address: 10.20.10.15/24
+  device: sw-f5
+  iface: vlan10
+  dns: sw-f5.baan-chalong.lan
+  status: active
+  desc: management
+  primary: true
+- address: 10.20.30.10/24
+  device: nvr-01
+  iface: eth0
+  dns: nvr-01.baan-chalong.lan
+  status: active
+  desc: CCTV VLAN
+  primary: true
+- address: 10.20.10.31/24
+  device: ap-f1-a
+  iface: eth0
+  dns: ap-f1-a.baan-chalong.lan
+  status: active
+  desc: management
+  primary: true
+- address: 10.20.10.32/24
+  device: ap-f1-b
+  iface: eth0
+  dns: ap-f1-b.baan-chalong.lan
+  status: active
+  desc: management
+  primary: true
+- address: 10.20.10.33/24
+  device: ap-f2-a
+  iface: eth0
+  dns: ap-f2-a.baan-chalong.lan
+  status: active
+  desc: management
+  primary: true
+- address: 10.20.10.34/24
+  device: ap-f2-b
+  iface: eth0
+  dns: ap-f2-b.baan-chalong.lan
+  status: active
+  desc: management
+  primary: true
+- address: 10.20.10.35/24
+  device: ap-f3-a
+  iface: eth0
+  dns: ap-f3-a.baan-chalong.lan
+  status: active
+  desc: management
+  primary: true
+- address: 10.20.10.36/24
+  device: ap-f3-b
+  iface: eth0
+  dns: ap-f3-b.baan-chalong.lan
+  status: active
+  desc: management
+  primary: true
+- address: 10.20.10.37/24
+  device: ap-f4-a
+  iface: eth0
+  dns: ap-f4-a.baan-chalong.lan
+  status: active
+  desc: management
+  primary: true
+- address: 10.20.10.38/24
+  device: ap-f4-b
+  iface: eth0
+  dns: ap-f4-b.baan-chalong.lan
+  status: active
+  desc: management
+  primary: true
+- address: 10.20.10.39/24
+  device: ap-f5-a
+  iface: eth0
+  dns: ap-f5-a.baan-chalong.lan
+  status: active
+  desc: management
+  primary: true
+- address: 10.20.10.40/24
+  device: ap-f5-b
+  iface: eth0
+  dns: ap-f5-b.baan-chalong.lan
+  status: active
+  desc: management
+  primary: true
+- address: 10.20.10.41/24
+  device: ap-lobby
+  iface: eth0
+  dns: ap-lobby.baan-chalong.lan
+  status: active
+  desc: management
+  primary: true
+- address: 10.20.10.50/24
+  device: mon-01
+  iface: eth0
+  dns: mon-01.baan-chalong.lan
+  status: active
+  desc: management
+  primary: true
+- address: 10.20.30.101/24
+  device: cam-f1-1
+  iface: eth0
+  dns: cam-f1-1.baan-chalong.lan
+  status: active
+  desc: CCTV VLAN
+  primary: true
+- address: 10.20.30.102/24
+  device: cam-f1-2
+  iface: eth0
+  dns: cam-f1-2.baan-chalong.lan
+  status: active
+  desc: CCTV VLAN
+  primary: true
+- address: 10.20.30.103/24
+  device: cam-f1-3
+  iface: eth0
+  dns: cam-f1-3.baan-chalong.lan
+  status: active
+  desc: CCTV VLAN
+  primary: true
+- address: 10.20.30.104/24
+  device: cam-f1-4
+  iface: eth0
+  dns: cam-f1-4.baan-chalong.lan
+  status: active
+  desc: CCTV VLAN
+  primary: true
+- address: 10.20.30.105/24
+  device: cam-f2-1
+  iface: eth0
+  dns: cam-f2-1.baan-chalong.lan
+  status: active
+  desc: CCTV VLAN
+  primary: true
+- address: 10.20.30.106/24
+  device: cam-f2-2
+  iface: eth0
+  dns: cam-f2-2.baan-chalong.lan
+  status: active
+  desc: CCTV VLAN
+  primary: true
+- address: 10.20.30.107/24
+  device: cam-f2-3
+  iface: eth0
+  dns: cam-f2-3.baan-chalong.lan
+  status: active
+  desc: CCTV VLAN
+  primary: true
+- address: 10.20.30.108/24
+  device: cam-f2-4
+  iface: eth0
+  dns: cam-f2-4.baan-chalong.lan
+  status: active
+  desc: CCTV VLAN
+  primary: true
+- address: 10.20.30.109/24
+  device: cam-f3-1
+  iface: eth0
+  dns: cam-f3-1.baan-chalong.lan
+  status: active
+  desc: CCTV VLAN
+  primary: true
+- address: 10.20.30.110/24
+  device: cam-f3-2
+  iface: eth0
+  dns: cam-f3-2.baan-chalong.lan
+  status: active
+  desc: CCTV VLAN
+  primary: true
+- address: 10.20.30.111/24
+  device: cam-f3-3
+  iface: eth0
+  dns: cam-f3-3.baan-chalong.lan
+  status: active
+  desc: CCTV VLAN
+  primary: true
+- address: 10.20.30.112/24
+  device: cam-f3-4
+  iface: eth0
+  dns: cam-f3-4.baan-chalong.lan
+  status: active
+  desc: CCTV VLAN
+  primary: true
+- address: 10.20.30.113/24
+  device: cam-f4-1
+  iface: eth0
+  dns: cam-f4-1.baan-chalong.lan
+  status: active
+  desc: CCTV VLAN
+  primary: true
+- address: 10.20.30.114/24
+  device: cam-f4-2
+  iface: eth0
+  dns: cam-f4-2.baan-chalong.lan
+  status: active
+  desc: CCTV VLAN
+  primary: true
+- address: 10.20.30.115/24
+  device: cam-f4-3
+  iface: eth0
+  dns: cam-f4-3.baan-chalong.lan
+  status: active
+  desc: CCTV VLAN
+  primary: true
+- address: 10.20.30.116/24
+  device: cam-f4-4
+  iface: eth0
+  dns: cam-f4-4.baan-chalong.lan
+  status: active
+  desc: CCTV VLAN
+  primary: true
+- address: 10.20.30.117/24
+  device: cam-f5-1
+  iface: eth0
+  dns: cam-f5-1.baan-chalong.lan
+  status: active
+  desc: CCTV VLAN
+  primary: true
+- address: 10.20.30.118/24
+  device: cam-f5-2
+  iface: eth0
+  dns: cam-f5-2.baan-chalong.lan
+  status: active
+  desc: CCTV VLAN
+  primary: true
+- address: 10.20.30.119/24
+  device: cam-f5-3
+  iface: eth0
+  dns: cam-f5-3.baan-chalong.lan
+  status: active
+  desc: CCTV VLAN
+  primary: true
+- address: 10.20.30.120/24
+  device: cam-f5-4
+  iface: eth0
+  dns: cam-f5-4.baan-chalong.lan
+  status: active
+  desc: CCTV VLAN
+  primary: true
+- address: 10.20.30.121/24
+  device: cam-core-1
+  iface: eth0
+  dns: cam-core-1.baan-chalong.lan
+  status: active
+  desc: CCTV VLAN
+  primary: true
+- address: 10.20.30.122/24
+  device: cam-core-2
+  iface: eth0
+  dns: cam-core-2.baan-chalong.lan
+  status: active
+  desc: CCTV VLAN
+  primary: true
+- address: 10.20.30.123/24
+  device: cam-core-3
+  iface: eth0
+  dns: cam-core-3.baan-chalong.lan
+  status: active
+  desc: CCTV VLAN
+  primary: true
+- address: 10.20.30.124/24
+  device: cam-core-4
+  iface: eth0
+  dns: cam-core-4.baan-chalong.lan
+  status: active
+  desc: CCTV VLAN
+  primary: true
+- address: 10.20.20.20/24
+  device: ''
+  iface: ''
+  dns: printer-01.baan-chalong.lan
+  status: reserved
+  desc: DHCP reservation printer-01
+  primary: false
+- address: 10.20.20.21/24
+  device: ''
+  iface: ''
+  dns: pos-01.baan-chalong.lan
+  status: reserved
+  desc: DHCP reservation pos-01
+  primary: false

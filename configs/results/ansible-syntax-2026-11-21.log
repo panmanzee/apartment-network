@@ -1,0 +1,3 @@
+$ ansible-playbook --syntax-check site.yml
+playbook: site.yml
+exit=0

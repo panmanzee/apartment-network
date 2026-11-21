@@ -1,0 +1,3 @@
+---
+fortigate_config_file: "{{ rendered_dir }}/fortigate/{{ inventory_hostname }}.conf"
+fortigate_expected_policies: 11

@@ -1,0 +1,81 @@
+! {{ host.name }} - floor {{ host.floor }} access switch, rooms {{ host.floor }}01-{{ host.floor }}{{ '%02d' % site.room_ports }}
+{% include 'ios-base.j2' %}
+{% for v in host.vlans %}
+vlan {{ v.id }}
+ name {{ v.name }}
+{% endfor %}
+vlan {{ site.blackhole_vlan }}
+ name BLACKHOLE
+!
+ip dhcp snooping
+ip dhcp snooping vlan {{ host.snoop_vlans | join(',') }}
+no ip dhcp snooping information option
+!
+{% for p in host.room_ports %}
+interface {{ p.ifname }}
+ description room-{{ p.room }}
+ switchport mode access
+ switchport access vlan {{ host.tenant_vlan }}
+ switchport protected
+ switchport port-security
+ switchport port-security maximum 2
+ switchport port-security violation restrict
+ switchport port-security mac-address sticky
+ storm-control broadcast level 5.00
+ storm-control multicast level 10.00
+ storm-control action trap
+ spanning-tree portfast
+ spanning-tree bpduguard enable
+ ip dhcp snooping limit rate 15
+ no cdp enable
+ no shutdown
+!
+{% endfor %}
+{% for p in host.ap_ports %}
+interface {{ p.ifname }}
+ description {{ p.name }}
+ switchport mode trunk
+ switchport trunk native vlan 10
+ switchport trunk allowed vlan {{ host.ap_allowed | join(',') }}
+ switchport nonegotiate
+ storm-control broadcast level 5.00
+ storm-control action trap
+ spanning-tree portfast trunk
+ spanning-tree bpduguard enable
+ no shutdown
+!
+{% endfor %}
+{% for p in host.cctv_ports %}
+interface {{ p.ifname }}
+ description cctv-f{{ host.floor }}-{{ p.n }}
+ switchport mode access
+ switchport access vlan 30
+ switchport protected
+ switchport port-security
+ switchport port-security maximum 1
+ switchport port-security violation restrict
+ storm-control broadcast level 5.00
+ storm-control action trap
+ spanning-tree portfast
+ spanning-tree bpduguard enable
+ no cdp enable
+ no shutdown
+!
+{% endfor %}
+{% for p in host.spare_ports %}
+interface {{ p.ifname }}
+ description unused
+ switchport mode access
+ switchport access vlan {{ site.blackhole_vlan }}
+ shutdown
+!
+{% endfor %}
+interface {{ host.uplink_if }}
+ description uplink-sw-core-Gi1/0/{{ host.core_port }}
+ switchport mode trunk
+ switchport trunk native vlan {{ site.blackhole_vlan }}
+ switchport trunk allowed vlan {{ host.uplink_allowed | join(',') }}
+ switchport nonegotiate
+ ip dhcp snooping trust
+ no shutdown
+{% include 'ios-tail.j2' %}

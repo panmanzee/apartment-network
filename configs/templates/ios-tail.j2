@@ -1,0 +1,27 @@
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+interface Vlan10
+ description mgmt-svi
+ ip address {{ host.mgmt_ip }} 255.255.255.0
+ no ip redirects
+ no ip proxy-arp
+ no shutdown
+!
+ip default-gateway {{ site.mgmt_gw }}
+no ip routing
+!
+line con 0
+ exec-timeout 10 0
+ logging synchronous
+line vty 0 15
+ access-class ACL-MGMT in
+ exec-timeout 10 0
+ logging synchronous
+ login authentication default
+ transport input ssh
+ transport output none
+!
+end

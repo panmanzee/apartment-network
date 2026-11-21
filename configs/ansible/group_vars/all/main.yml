@@ -1,0 +1,9 @@
+---
+rendered_dir: "{{ playbook_dir }}/../out"
+secrets_map:
+  __ADMIN_PASS__: "{{ vault_admin_pass }}"
+  __ENABLE_PASS__: "{{ vault_enable_pass }}"
+  __SNMP_AUTH__: "{{ vault_snmp_auth }}"
+  __SNMP_PRIV__: "{{ vault_snmp_priv }}"
+  __IPSEC_PSK__: "{{ vault_ipsec_psk }}"
+  __OWNER_PASS__: "{{ vault_owner_pass }}"

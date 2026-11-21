@@ -1,0 +1,3 @@
+---
+cisco_access_config_file: "{{ rendered_dir }}/cisco/{{ inventory_hostname }}.cfg"
+cisco_access_tmp_file: "{{ playbook_dir }}/.rendered-{{ inventory_hostname }}.cfg"

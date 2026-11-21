@@ -1,0 +1,79 @@
+! {{ host.name }} - core switch, layer 2 only, routing is on the firewall
+{% include 'ios-base.j2' %}
+{% for v in host.vlans %}
+vlan {{ v.id }}
+ name {{ v.name }}
+{% endfor %}
+vlan {{ site.blackhole_vlan }}
+ name BLACKHOLE
+!
+interface Port-channel1
+ description lag-fw-edge
+ switchport mode trunk
+ switchport trunk native vlan {{ site.blackhole_vlan }}
+ switchport trunk allowed vlan {{ host.fw_allowed | join(',') }}
+ switchport nonegotiate
+!
+{% for p in host.fw_ports %}
+interface {{ p.ifname }}
+ description fw-edge-{{ p.fw_port }}
+ switchport mode trunk
+ switchport trunk native vlan {{ site.blackhole_vlan }}
+ switchport trunk allowed vlan {{ host.fw_allowed | join(',') }}
+ switchport nonegotiate
+ channel-group 1 mode active
+ no shutdown
+!
+{% endfor %}
+{% for p in host.floor_ports %}
+interface {{ p.ifname }}
+ description {{ p.name }}
+ switchport mode trunk
+ switchport trunk native vlan {{ site.blackhole_vlan }}
+ switchport trunk allowed vlan {{ p.allowed | join(',') }}
+ switchport nonegotiate
+ no shutdown
+!
+{% endfor %}
+{% for p in host.access_ports %}
+interface {{ p.ifname }}
+ description {{ p.name }}
+ switchport mode access
+ switchport access vlan {{ p.vlan }}
+{% if p.protected %}
+ switchport protected
+{% endif %}
+ switchport port-security
+ switchport port-security maximum {{ p.maxmac }}
+ switchport port-security violation restrict
+ storm-control broadcast level 5.00
+ storm-control action trap
+ spanning-tree portfast
+ spanning-tree bpduguard enable
+ no cdp enable
+ no shutdown
+!
+{% endfor %}
+{% for p in host.ap_ports %}
+interface {{ p.ifname }}
+ description {{ p.name }}
+ switchport mode trunk
+ switchport trunk native vlan 10
+ switchport trunk allowed vlan {{ p.allowed | join(',') }}
+ switchport nonegotiate
+ storm-control broadcast level 5.00
+ storm-control action trap
+ spanning-tree portfast trunk
+ spanning-tree bpduguard enable
+ no shutdown
+!
+{% endfor %}
+{% for p in host.spare_ports %}
+interface {{ p.ifname }}
+ description unused
+ switchport mode access
+ switchport access vlan {{ site.blackhole_vlan }}
+ shutdown
+!
+{% endfor %}
+{% include 'ios-tail.j2' %}

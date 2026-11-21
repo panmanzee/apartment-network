@@ -1,0 +1,41 @@
+---
+- name: Load rendered FortiOS config with secrets filled in
+  ansible.builtin.set_fact:
+    fortigate_cli: "{{ lookup('ansible.builtin.file', fortigate_config_file) | regex_replace('(?m)^#.*\\n', '') }}"
+  no_log: true
+
+- name: Replace secret placeholders
+  ansible.builtin.set_fact:
+    fortigate_cli: "{{ fortigate_cli | replace(item.key, item.value) }}"
+  loop: "{{ secrets_map | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  no_log: true
+
+- name: Push CLI config over ssh
+  ansible.builtin.raw: "{{ fortigate_cli }}"
+  register: fortigate_push
+  changed_when: true
+  no_log: true
+  when: not ansible_check_mode
+
+- name: Read back firewall policies through the REST API
+  fortinet.fortios.fortios_configuration_fact:
+    selectors:
+      - selector: firewall_policy
+  vars:
+    ansible_connection: httpapi
+    ansible_httpapi_use_ssl: true
+    ansible_httpapi_validate_certs: true
+    ansible_httpapi_port: 8443
+  register: fortigate_policies
+  when:
+    - fortios_access_token is defined
+    - not ansible_check_mode
+
+- name: Policy count matches the render
+  ansible.builtin.assert:
+    that:
+      - fortigate_policies.meta.results | length == fortigate_expected_policies
+    quiet: true
+  when: fortigate_policies is not skipped

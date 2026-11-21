@@ -1,0 +1,45 @@
+name,role,manufacturer,device_type,status,site,description
+fw-edge,firewall,Fortinet,Edge Firewall,active,Baan Chalong Residence,
+sw-core,core-switch,TP-Link,Core Switch 24p,active,Baan Chalong Residence,
+sw-f1,access-switch,TP-Link,Access Switch 24p,active,Baan Chalong Residence,floor 1
+sw-f2,access-switch,TP-Link,Access Switch 24p,active,Baan Chalong Residence,floor 2
+sw-f3,access-switch,TP-Link,Access Switch 24p,active,Baan Chalong Residence,floor 3
+sw-f4,access-switch,TP-Link,Access Switch 24p,active,Baan Chalong Residence,floor 4
+sw-f5,access-switch,TP-Link,Access Switch 24p,active,Baan Chalong Residence,floor 5
+nvr-01,nvr,Generic,NVR,active,Baan Chalong Residence,
+ap-f1-a,ap,TP-Link,Omada AP,active,Baan Chalong Residence,floor 1
+ap-f1-b,ap,TP-Link,Omada AP,active,Baan Chalong Residence,floor 1
+ap-f2-a,ap,TP-Link,Omada AP,active,Baan Chalong Residence,floor 2
+ap-f2-b,ap,TP-Link,Omada AP,active,Baan Chalong Residence,floor 2
+ap-f3-a,ap,TP-Link,Omada AP,active,Baan Chalong Residence,floor 3
+ap-f3-b,ap,TP-Link,Omada AP,active,Baan Chalong Residence,floor 3
+ap-f4-a,ap,TP-Link,Omada AP,active,Baan Chalong Residence,floor 4
+ap-f4-b,ap,TP-Link,Omada AP,active,Baan Chalong Residence,floor 4
+ap-f5-a,ap,TP-Link,Omada AP,active,Baan Chalong Residence,floor 5
+ap-f5-b,ap,TP-Link,Omada AP,active,Baan Chalong Residence,floor 5
+ap-lobby,ap,TP-Link,Omada AP,active,Baan Chalong Residence,floor 0
+mon-01,monitoring,Generic,Monitoring Server,active,Baan Chalong Residence,
+cam-f1-1,camera,Generic,IP Camera,active,Baan Chalong Residence,floor 1
+cam-f1-2,camera,Generic,IP Camera,active,Baan Chalong Residence,floor 1
+cam-f1-3,camera,Generic,IP Camera,active,Baan Chalong Residence,floor 1
+cam-f1-4,camera,Generic,IP Camera,active,Baan Chalong Residence,floor 1
+cam-f2-1,camera,Generic,IP Camera,active,Baan Chalong Residence,floor 2
+cam-f2-2,camera,Generic,IP Camera,active,Baan Chalong Residence,floor 2
+cam-f2-3,camera,Generic,IP Camera,active,Baan Chalong Residence,floor 2
+cam-f2-4,camera,Generic,IP Camera,active,Baan Chalong Residence,floor 2
+cam-f3-1,camera,Generic,IP Camera,active,Baan Chalong Residence,floor 3
+cam-f3-2,camera,Generic,IP Camera,active,Baan Chalong Residence,floor 3
+cam-f3-3,camera,Generic,IP Camera,active,Baan Chalong Residence,floor 3
+cam-f3-4,camera,Generic,IP Camera,active,Baan Chalong Residence,floor 3
+cam-f4-1,camera,Generic,IP Camera,active,Baan Chalong Residence,floor 4
+cam-f4-2,camera,Generic,IP Camera,active,Baan Chalong Residence,floor 4
+cam-f4-3,camera,Generic,IP Camera,active,Baan Chalong Residence,floor 4
+cam-f4-4,camera,Generic,IP Camera,active,Baan Chalong Residence,floor 4
+cam-f5-1,camera,Generic,IP Camera,active,Baan Chalong Residence,floor 5
+cam-f5-2,camera,Generic,IP Camera,active,Baan Chalong Residence,floor 5
+cam-f5-3,camera,Generic,IP Camera,active,Baan Chalong Residence,floor 5
+cam-f5-4,camera,Generic,IP Camera,active,Baan Chalong Residence,floor 5
+cam-core-1,camera,Generic,IP Camera,active,Baan Chalong Residence,floor 0
+cam-core-2,camera,Generic,IP Camera,active,Baan Chalong Residence,floor 0
+cam-core-3,camera,Generic,IP Camera,active,Baan Chalong Residence,floor 0
+cam-core-4,camera,Generic,IP Camera,active,Baan Chalong Residence,floor 0

@@ -1,0 +1,42 @@
+name: apt
+mgmt:
+  network: apt-mgmt
+  ipv4-subnet: 172.31.99.0/24
+
+topology:
+  defaults:
+    kind: linux
+    image: apt-lab:latest
+    binds:
+      - ./cfg:/cfg:ro
+
+  nodes:
+    isp:      {exec: ["bash /cfg/isp.sh"]}
+    internet: {exec: ["bash /cfg/internet.sh"]}
+    owner:    {exec: ["bash /cfg/owner.sh"]}
+    fw-edge:  {exec: ["bash /cfg/fw-edge.sh"]}
+    sw-core:  {exec: ["bash /cfg/sw-core.sh"]}
+    sw-f1:    {exec: ["bash /cfg/sw-f1.sh"]}
+    staff:    {exec: ["bash /cfg/host.sh 10.20.20.50/24 10.20.20.1"]}
+    guest:    {exec: ["bash /cfg/host.sh 10.20.40.100/24 10.20.40.1"]}
+    cam:      {exec: ["bash /cfg/host.sh 10.20.30.20/24 10.20.30.1"]}
+    nvr:      {exec: ["bash /cfg/host.sh 10.20.30.10/24 10.20.30.1", "bash /cfg/nvr.sh"]}
+    mgmtpc:   {exec: ["bash /cfg/host.sh 10.20.10.50/24 10.20.10.1"]}
+    room101:  {exec: ["bash /cfg/host.sh 10.21.1.11/24 10.21.1.1"]}
+    room102:  {exec: ["bash /cfg/host.sh 10.21.1.12/24 10.21.1.1"]}
+    room103:  {exec: ["bash /cfg/host.sh 10.21.1.13/24 10.21.1.1"]}
+
+  links:
+    - endpoints: ["owner:eth1", "isp:eth3"]
+    - endpoints: ["internet:eth1", "isp:eth2"]
+    - endpoints: ["fw-edge:eth2", "isp:eth1"]
+    - endpoints: ["fw-edge:eth1", "sw-core:eth1"]
+    - endpoints: ["sw-core:eth2", "sw-f1:eth1"]
+    - endpoints: ["sw-core:eth3", "staff:eth1"]
+    - endpoints: ["sw-core:eth4", "guest:eth1"]
+    - endpoints: ["sw-core:eth5", "cam:eth1"]
+    - endpoints: ["sw-core:eth6", "nvr:eth1"]
+    - endpoints: ["sw-core:eth7", "mgmtpc:eth1"]
+    - endpoints: ["sw-f1:eth2", "room101:eth1"]
+    - endpoints: ["sw-f1:eth3", "room102:eth1"]
+    - endpoints: ["sw-f1:eth4", "room103:eth1"]

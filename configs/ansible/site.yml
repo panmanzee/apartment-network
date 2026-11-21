@@ -1,0 +1,13 @@
+---
+- name: Edge firewall
+  hosts: fortigate
+  gather_facts: false
+  roles:
+    - role: fortigate
+
+- name: Core and access switches
+  hosts: cisco
+  gather_facts: false
+  serial: 1
+  roles:
+    - role: cisco_access

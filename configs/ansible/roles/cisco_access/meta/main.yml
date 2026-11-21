@@ -1,0 +1,10 @@
+---
+galaxy_info:
+  author: pan
+  description: push the rendered IOS config to a Catalyst switch
+  license: MIT
+  min_ansible_version: "2.14"
+  platforms:
+    - name: GenericUNIX
+      versions: [all]
+dependencies: []

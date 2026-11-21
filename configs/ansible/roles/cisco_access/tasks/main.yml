@@ -1,0 +1,37 @@
+---
+- name: Write config with secrets filled in (controller only)
+  ansible.builtin.template:
+    src: with_secrets.cfg.j2
+    dest: "{{ cisco_access_tmp_file }}"
+    mode: "0600"
+  delegate_to: localhost
+  changed_when: false
+  no_log: true
+
+- name: Apply config
+  cisco.ios.ios_config:
+    src: "{{ cisco_access_tmp_file }}"
+    save_when: modified
+    diff_against: intended
+    diff_ignore_lines:
+      - "^! "
+  register: cisco_access_apply
+  no_log: true
+
+- name: Check vlans match the render
+  cisco.ios.ios_vlans:
+    state: gathered
+  register: cisco_access_vlans
+  when: not ansible_check_mode
+
+- name: Show vlan ids on device
+  ansible.builtin.debug:
+    msg: "{{ cisco_access_vlans.gathered | map(attribute='vlan_id') | list }}"
+  when: cisco_access_vlans is not skipped
+
+- name: Remove temp file
+  ansible.builtin.file:
+    path: "{{ cisco_access_tmp_file }}"
+    state: absent
+  delegate_to: localhost
+  changed_when: false

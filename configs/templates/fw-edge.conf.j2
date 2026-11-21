@@ -1,0 +1,304 @@
+#config-version=FGT60F-7.4.4-FW-build2662-240319:opmode=0:vdom=0
+# {{ site.name }} - edge firewall (FortiGate 60F), generated from plan/ip-plan.yaml
+config system global
+    set hostname "{{ fw.name }}"
+    set alias "{{ fw.name }}"
+    set timezone "Asia/Bangkok"
+    set admintimeout 10
+    set admin-ssh-port 22
+    set admin-sport 8443
+    set admin-https-redirect disable
+    set admin-https-ssl-versions tlsv1-2 tlsv1-3
+    set admin-lockout-threshold 5
+    set admin-lockout-duration 300
+    set strong-crypto enable
+end
+config system password-policy
+    set status enable
+    set minimum-length 12
+end
+config system admin
+    edit "{{ site.admin_user }}"
+        set accprofile "super_admin"
+        set trusthost1 {{ mgmt.net }} {{ mgmt.mask }}
+        set password __ADMIN_PASS__
+    next
+end
+config system ntp
+    set ntpsync enable
+    set type custom
+    set server-mode enable
+    set interface "{{ mgmt.ifname }}"
+    config ntpserver
+{% for s in site.upstream_ntp %}
+        edit {{ loop.index }}
+            set server "{{ s }}"
+        next
+{% endfor %}
+    end
+end
+config system dns
+    set primary 1.1.1.1
+    set secondary 9.9.9.9
+end
+config log syslogd setting
+    set status enable
+    set server "{{ site.syslog_host }}"
+    set source-ip {{ fw.mgmt_ip }}
+end
+config system snmp sysinfo
+    set status enable
+    set description "{{ site.name }} edge firewall"
+    set location "{{ site.name }}, MDF rack"
+    set contact-info "{{ site.contact }}"
+end
+config system snmp user
+    edit "{{ site.snmp_user }}"
+        set security-level auth-priv
+        set auth-proto sha256
+        set auth-pwd __SNMP_AUTH__
+        set priv-proto aes
+        set priv-pwd __SNMP_PRIV__
+        set queries enable
+        set query-port 161
+        set trap-status disable
+    next
+end
+config system interface
+{% for w in wans %}
+    edit "{{ w.ifname }}"
+        set vdom "root"
+        set mode dhcp
+        set defaultgw enable
+        set allowaccess ping
+        set alias "{{ w.alias }}"
+        set role wan
+    next
+{% endfor %}
+    edit "lag-core"
+        set vdom "root"
+        set type aggregate
+        set member {% for m in lag_members %}"{{ m }}" {% endfor %}
+
+        set lacp-mode active
+        set lacp-speed slow
+        set alias "to sw-core Po1"
+        set role lan
+    next
+{% for v in vlans %}
+    edit "{{ v.ifname }}"
+        set vdom "root"
+        set vlanid {{ v.id }}
+        set interface "lag-core"
+        set ip {{ v.gw }} {{ v.mask }}
+        set alias "{{ v.name }}"
+        set role lan
+{% if v.name == 'MGMT' %}
+        set allowaccess ping https ssh snmp
+{% else %}
+        set allowaccess ping
+{% endif %}
+{% if v.name == 'GUEST' %}
+        set security-mode captive-portal
+        set security-groups "grp-guest-portal"
+{% endif %}
+    next
+{% endfor %}
+end
+config system sdwan
+    set status enable
+    config zone
+        edit "virtual-wan-link"
+        next
+    end
+    config members
+{% for w in wans %}
+        edit {{ loop.index }}
+            set interface "{{ w.ifname }}"
+            set zone "virtual-wan-link"
+            set cost {{ loop.index * 10 }}
+        next
+{% endfor %}
+    end
+    config health-check
+        edit "hc-internet"
+            set server "1.1.1.1" "9.9.9.9"
+            set protocol ping
+            set interval 1000
+            set failtime 3
+            set recoverytime 5
+            set members 1 2
+        next
+    end
+    config service
+        edit 1
+            set name "wan-failover"
+            set mode priority
+            set dst "all"
+            set src "all"
+            set health-check "hc-internet"
+            set priority-members 1 2
+        next
+    end
+end
+config router static
+    edit 1
+        set sdwan-zone "virtual-wan-link"
+        set comment "default via sd-wan, wan1 preferred"
+    next
+end
+config user local
+    edit "{{ site.owner_user }}"
+        set type password
+        set passwd __OWNER_PASS__
+    next
+end
+config user group
+    edit "grp-owner-vpn"
+        set member "{{ site.owner_user }}"
+    next
+    edit "grp-guest-portal"
+        set group-type guest
+    next
+end
+config vpn ipsec phase1-interface
+{% for p in vpn_ifs %}
+    edit "{{ p.name }}"
+        set type dynamic
+        set interface "{{ p.wan }}"
+        set ike-version 2
+        set authmethod psk
+        set eap enable
+        set eap-identity send-request
+        set authusrgrp "grp-owner-vpn"
+        set peertype any
+        set mode-cfg enable
+        set ipv4-start-ip {{ vpn.start }}
+        set ipv4-end-ip {{ vpn.end }}
+        set ipv4-netmask {{ vpn.mask }}
+        set ipv4-split-include "grp-vpn-allowed"
+        set dpd on-idle
+        set dpd-retrycount 3
+        set dpd-retryinterval 10
+        set proposal aes256-sha256
+        set dhgrp 20 14
+        set psksecret __IPSEC_PSK__
+        set comments "FortiClient dial-up, owner"
+    next
+{% endfor %}
+end
+config vpn ipsec phase2-interface
+{% for p in vpn_ifs %}
+    edit "{{ p.name }}"
+        set phase1name "{{ p.name }}"
+        set proposal aes256-sha256
+        set pfs enable
+        set dhgrp 20
+    next
+{% endfor %}
+end
+config firewall address
+{% for v in vlans %}
+    edit "net-{{ v.name }}"
+        set subnet {{ v.subnet_ip }} {{ v.mask }}
+    next
+{% endfor %}
+    edit "net-OWNER-VPN"
+        set subnet {{ vpn.net }} {{ vpn.mask }}
+    next
+{% for r in rfc1918 %}
+    edit "{{ r.name }}"
+        set subnet {{ r.net }} {{ r.mask }}
+    next
+{% endfor %}
+end
+config firewall addrgrp
+    edit "grp-tenants"
+        set member {% for v in tenants %}"net-{{ v.name }}" {% endfor %}
+
+    next
+    edit "grp-rfc1918"
+        set member {% for r in rfc1918 %}"{{ r.name }}" {% endfor %}
+
+    next
+    edit "grp-vpn-allowed"
+        set member "net-MGMT" "net-CCTV"
+    next
+end
+config firewall service custom
+{% for s in services %}
+    edit "{{ s.name }}"
+        set tcp-portrange {{ s.ports | join(' ') }}
+    next
+{% endfor %}
+end
+config firewall service group
+    edit "grp-mgmt-out"
+        set member "HTTPS" "HTTP" "DNS" "NTP"
+    next
+end
+config firewall shaper per-ip-shaper
+{% for s in shapers %}
+    edit "{{ s.name }}"
+        set max-bandwidth {{ s.kbps }}
+        set bandwidth-unit kbps
+    next
+{% endfor %}
+end
+config firewall shaping-policy
+{% for s in shaping %}
+    edit {{ loop.index }}
+        set name "{{ s.name }}"
+        set comment "{{ s.comment }}"
+        set service "ALL"
+        set srcaddr {% for a in s.srcaddr %}"{{ a }}" {% endfor %}
+
+        set dstaddr "all"
+        set dstintf "virtual-wan-link"
+        set per-ip-shaper "{{ s.shaper }}"
+    next
+{% endfor %}
+end
+config firewall policy
+{% for p in policies %}
+    edit {{ loop.index }}
+        set name "{{ p.name }}"
+        set comments "{{ p.comment }}"
+        set srcintf {% for i in p.srcintf %}"{{ i }}" {% endfor %}
+
+        set dstintf {% for i in p.dstintf %}"{{ i }}" {% endfor %}
+
+        set srcaddr {% for i in p.srcaddr %}"{{ i }}" {% endfor %}
+
+        set dstaddr {% for i in p.dstaddr %}"{{ i }}" {% endfor %}
+
+        set action {{ p.action }}
+        set schedule "always"
+        set service {% for i in p.service %}"{{ i }}" {% endfor %}
+
+{% if p.action == 'accept' %}
+        set nat {{ 'enable' if p.nat else 'disable' }}
+        set logtraffic utm
+{% else %}
+        set logtraffic all
+{% endif %}
+    next
+{% endfor %}
+end
+config system dhcp server
+{% for v in dhcp_vlans %}
+    edit {{ loop.index }}
+        set interface "{{ v.ifname }}"
+        set default-gateway {{ v.gw }}
+        set netmask {{ v.mask }}
+        set dns-service default
+        set lease-time {{ v.lease }}
+        config ip-range
+            edit 1
+                set start-ip {{ v.pool_start }}
+                set end-ip {{ v.pool_end }}
+            next
+        end
+    next
+{% endfor %}
+end

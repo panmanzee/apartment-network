@@ -1,0 +1,8 @@
+5e320755800dfe888642534bc7907b7c  ansible/inventory/hosts.yml
+fa0e7c6291d83fc834bbcc2607f2934f  out/cisco/sw-core.cfg
+783968ed65efce9d6449617f623b7de5  out/cisco/sw-f1.cfg
+b3ab5c11bd87d22e866ffc47b837d3dd  out/cisco/sw-f2.cfg
+1c082a178a92c5163d8e2a5851763ffa  out/cisco/sw-f3.cfg
+74470906f9bf18ab0bbeb827d9d2c85f  out/cisco/sw-f4.cfg
+d2f229e04a402fa695d964e1dd4c0abd  out/cisco/sw-f5.cfg
+99f74ba0022c605e3b45fad699d5b930  out/fortigate/fw-edge.conf

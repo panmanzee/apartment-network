@@ -1,0 +1,320 @@
+PASS  sw-core  hostname matches plan
+PASS  sw-core  rapid-pvst
+PASS  sw-core  no telnet anywhere
+PASS  sw-core  vty transport input ssh only
+PASS  sw-core  vty access-class applied
+PASS  sw-core  ssh v2
+PASS  sw-core  http server off
+PASS  sw-core  aaa local login
+PASS  sw-core  snmp v3 only (no community)
+PASS  sw-core  ntp server is fw
+PASS  sw-core  logging host set
+PASS  sw-core  banner present
+PASS  sw-core  secrets are placeholders, none in clear
+PASS  sw-core  mgmt SVI 10.20.10.2
+PASS  sw-core  stp root priority 4096 on all vlans
+PASS  sw-core  no ip routing (l2 only)
+PASS  sw-core  default gateway is fw
+PASS  sw-core  all plan vlans defined
+PASS  sw-core  Po1 trunk allowed = all plan vlans
+PASS  sw-core  Gi1/0/1 in channel-group 1 (lacp active)
+PASS  sw-core  Gi1/0/2 in channel-group 1 (lacp active)
+PASS  sw-core  Gi1/0/11 -> sw-f1 trunk list equals sw-f1 uplink list [10, 30, 40, 101]
+PASS  sw-core  Gi1/0/12 -> sw-f2 trunk list equals sw-f2 uplink list [10, 30, 40, 102]
+PASS  sw-core  Gi1/0/13 -> sw-f3 trunk list equals sw-f3 uplink list [10, 30, 40, 103]
+PASS  sw-core  Gi1/0/14 -> sw-f4 trunk list equals sw-f4 uplink list [10, 30, 40, 104]
+PASS  sw-core  Gi1/0/15 -> sw-f5 trunk list equals sw-f5 uplink list [10, 30, 40, 105]
+PASS  sw-core  nvr + 4 lobby cctv ports in vlan 30
+PASS  sw-core  staff ports in vlan 20
+PASS  sw-core  ap-lobby trunk native 10 allowed {10,40}
+PASS  sw-core  no tenant vlan reaches core access ports
+PASS  sw-core  all 24 ports configured
+PASS  sw-f1    hostname matches plan
+PASS  sw-f1    rapid-pvst
+PASS  sw-f1    no telnet anywhere
+PASS  sw-f1    vty transport input ssh only
+PASS  sw-f1    vty access-class applied
+PASS  sw-f1    ssh v2
+PASS  sw-f1    http server off
+PASS  sw-f1    aaa local login
+PASS  sw-f1    snmp v3 only (no community)
+PASS  sw-f1    ntp server is fw
+PASS  sw-f1    logging host set
+PASS  sw-f1    banner present
+PASS  sw-f1    secrets are placeholders, none in clear
+PASS  sw-f1    mgmt SVI 10.20.10.11
+PASS  sw-f1    not stp root (no priority 4096)
+PASS  sw-f1    room 101 on Gi1/0/1: access vlan 101, protected, port-sec, storm, bpduguard
+PASS  sw-f1    room 102 on Gi1/0/2: access vlan 101, protected, port-sec, storm, bpduguard
+PASS  sw-f1    room 103 on Gi1/0/3: access vlan 101, protected, port-sec, storm, bpduguard
+PASS  sw-f1    room 104 on Gi1/0/4: access vlan 101, protected, port-sec, storm, bpduguard
+PASS  sw-f1    room 105 on Gi1/0/5: access vlan 101, protected, port-sec, storm, bpduguard
+PASS  sw-f1    room 106 on Gi1/0/6: access vlan 101, protected, port-sec, storm, bpduguard
+PASS  sw-f1    room 107 on Gi1/0/7: access vlan 101, protected, port-sec, storm, bpduguard
+PASS  sw-f1    room 108 on Gi1/0/8: access vlan 101, protected, port-sec, storm, bpduguard
+PASS  sw-f1    room 109 on Gi1/0/9: access vlan 101, protected, port-sec, storm, bpduguard
+PASS  sw-f1    room 110 on Gi1/0/10: access vlan 101, protected, port-sec, storm, bpduguard
+PASS  sw-f1    room 111 on Gi1/0/11: access vlan 101, protected, port-sec, storm, bpduguard
+PASS  sw-f1    room 112 on Gi1/0/12: access vlan 101, protected, port-sec, storm, bpduguard
+PASS  sw-f1    exactly 12 ports in vlan 101
+PASS  sw-f1    ap-f1-a Gi1/0/13 trunk native 10 allowed {10,40,101}
+PASS  sw-f1    ap-f1-b Gi1/0/14 trunk native 10 allowed {10,40,101}
+PASS  sw-f1    cctv Gi1/0/15 access vlan 30 + bpduguard
+PASS  sw-f1    cctv Gi1/0/16 access vlan 30 + bpduguard
+PASS  sw-f1    cctv Gi1/0/17 access vlan 30 + bpduguard
+PASS  sw-f1    cctv Gi1/0/18 access vlan 30 + bpduguard
+PASS  sw-f1    uplink Gi1/0/24 trunk allowed exactly {10,30,40,101}
+PASS  sw-f1    uplink never carries staff/other floors' tenant vlans
+PASS  sw-f1    uplink native vlan is blackhole
+PASS  sw-f1    uplink dhcp snooping trust
+PASS  sw-f1    no 'allowed vlan all'
+PASS  sw-f1    spare ports 19-23 shutdown in blackhole vlan
+PASS  sw-f1    all 24 ports configured
+PASS  sw-f1    vlan list is only 10,30,40,tenant,999
+PASS  sw-f1    dhcp snooping vlans
+PASS  sw-f2    hostname matches plan
+PASS  sw-f2    rapid-pvst
+PASS  sw-f2    no telnet anywhere
+PASS  sw-f2    vty transport input ssh only
+PASS  sw-f2    vty access-class applied
+PASS  sw-f2    ssh v2
+PASS  sw-f2    http server off
+PASS  sw-f2    aaa local login
+PASS  sw-f2    snmp v3 only (no community)
+PASS  sw-f2    ntp server is fw
+PASS  sw-f2    logging host set
+PASS  sw-f2    banner present
+PASS  sw-f2    secrets are placeholders, none in clear
+PASS  sw-f2    mgmt SVI 10.20.10.12
+PASS  sw-f2    not stp root (no priority 4096)
+PASS  sw-f2    room 201 on Gi1/0/1: access vlan 102, protected, port-sec, storm, bpduguard
+PASS  sw-f2    room 202 on Gi1/0/2: access vlan 102, protected, port-sec, storm, bpduguard
+PASS  sw-f2    room 203 on Gi1/0/3: access vlan 102, protected, port-sec, storm, bpduguard
+PASS  sw-f2    room 204 on Gi1/0/4: access vlan 102, protected, port-sec, storm, bpduguard
+PASS  sw-f2    room 205 on Gi1/0/5: access vlan 102, protected, port-sec, storm, bpduguard
+PASS  sw-f2    room 206 on Gi1/0/6: access vlan 102, protected, port-sec, storm, bpduguard
+PASS  sw-f2    room 207 on Gi1/0/7: access vlan 102, protected, port-sec, storm, bpduguard
+PASS  sw-f2    room 208 on Gi1/0/8: access vlan 102, protected, port-sec, storm, bpduguard
+PASS  sw-f2    room 209 on Gi1/0/9: access vlan 102, protected, port-sec, storm, bpduguard
+PASS  sw-f2    room 210 on Gi1/0/10: access vlan 102, protected, port-sec, storm, bpduguard
+PASS  sw-f2    room 211 on Gi1/0/11: access vlan 102, protected, port-sec, storm, bpduguard
+PASS  sw-f2    room 212 on Gi1/0/12: access vlan 102, protected, port-sec, storm, bpduguard
+PASS  sw-f2    exactly 12 ports in vlan 102
+PASS  sw-f2    ap-f2-a Gi1/0/13 trunk native 10 allowed {10,40,102}
+PASS  sw-f2    ap-f2-b Gi1/0/14 trunk native 10 allowed {10,40,102}
+PASS  sw-f2    cctv Gi1/0/15 access vlan 30 + bpduguard
+PASS  sw-f2    cctv Gi1/0/16 access vlan 30 + bpduguard
+PASS  sw-f2    cctv Gi1/0/17 access vlan 30 + bpduguard
+PASS  sw-f2    cctv Gi1/0/18 access vlan 30 + bpduguard
+PASS  sw-f2    uplink Gi1/0/24 trunk allowed exactly {10,30,40,102}
+PASS  sw-f2    uplink never carries staff/other floors' tenant vlans
+PASS  sw-f2    uplink native vlan is blackhole
+PASS  sw-f2    uplink dhcp snooping trust
+PASS  sw-f2    no 'allowed vlan all'
+PASS  sw-f2    spare ports 19-23 shutdown in blackhole vlan
+PASS  sw-f2    all 24 ports configured
+PASS  sw-f2    vlan list is only 10,30,40,tenant,999
+PASS  sw-f2    dhcp snooping vlans
+PASS  sw-f3    hostname matches plan
+PASS  sw-f3    rapid-pvst
+PASS  sw-f3    no telnet anywhere
+PASS  sw-f3    vty transport input ssh only
+PASS  sw-f3    vty access-class applied
+PASS  sw-f3    ssh v2
+PASS  sw-f3    http server off
+PASS  sw-f3    aaa local login
+PASS  sw-f3    snmp v3 only (no community)
+PASS  sw-f3    ntp server is fw
+PASS  sw-f3    logging host set
+PASS  sw-f3    banner present
+PASS  sw-f3    secrets are placeholders, none in clear
+PASS  sw-f3    mgmt SVI 10.20.10.13
+PASS  sw-f3    not stp root (no priority 4096)
+PASS  sw-f3    room 301 on Gi1/0/1: access vlan 103, protected, port-sec, storm, bpduguard
+PASS  sw-f3    room 302 on Gi1/0/2: access vlan 103, protected, port-sec, storm, bpduguard
+PASS  sw-f3    room 303 on Gi1/0/3: access vlan 103, protected, port-sec, storm, bpduguard
+PASS  sw-f3    room 304 on Gi1/0/4: access vlan 103, protected, port-sec, storm, bpduguard
+PASS  sw-f3    room 305 on Gi1/0/5: access vlan 103, protected, port-sec, storm, bpduguard
+PASS  sw-f3    room 306 on Gi1/0/6: access vlan 103, protected, port-sec, storm, bpduguard
+PASS  sw-f3    room 307 on Gi1/0/7: access vlan 103, protected, port-sec, storm, bpduguard
+PASS  sw-f3    room 308 on Gi1/0/8: access vlan 103, protected, port-sec, storm, bpduguard
+PASS  sw-f3    room 309 on Gi1/0/9: access vlan 103, protected, port-sec, storm, bpduguard
+PASS  sw-f3    room 310 on Gi1/0/10: access vlan 103, protected, port-sec, storm, bpduguard
+PASS  sw-f3    room 311 on Gi1/0/11: access vlan 103, protected, port-sec, storm, bpduguard
+PASS  sw-f3    room 312 on Gi1/0/12: access vlan 103, protected, port-sec, storm, bpduguard
+PASS  sw-f3    exactly 12 ports in vlan 103
+PASS  sw-f3    ap-f3-a Gi1/0/13 trunk native 10 allowed {10,40,103}
+PASS  sw-f3    ap-f3-b Gi1/0/14 trunk native 10 allowed {10,40,103}
+PASS  sw-f3    cctv Gi1/0/15 access vlan 30 + bpduguard
+PASS  sw-f3    cctv Gi1/0/16 access vlan 30 + bpduguard
+PASS  sw-f3    cctv Gi1/0/17 access vlan 30 + bpduguard
+PASS  sw-f3    cctv Gi1/0/18 access vlan 30 + bpduguard
+PASS  sw-f3    uplink Gi1/0/24 trunk allowed exactly {10,30,40,103}
+PASS  sw-f3    uplink never carries staff/other floors' tenant vlans
+PASS  sw-f3    uplink native vlan is blackhole
+PASS  sw-f3    uplink dhcp snooping trust
+PASS  sw-f3    no 'allowed vlan all'
+PASS  sw-f3    spare ports 19-23 shutdown in blackhole vlan
+PASS  sw-f3    all 24 ports configured
+PASS  sw-f3    vlan list is only 10,30,40,tenant,999
+PASS  sw-f3    dhcp snooping vlans
+PASS  sw-f4    hostname matches plan
+PASS  sw-f4    rapid-pvst
+PASS  sw-f4    no telnet anywhere
+PASS  sw-f4    vty transport input ssh only
+PASS  sw-f4    vty access-class applied
+PASS  sw-f4    ssh v2
+PASS  sw-f4    http server off
+PASS  sw-f4    aaa local login
+PASS  sw-f4    snmp v3 only (no community)
+PASS  sw-f4    ntp server is fw
+PASS  sw-f4    logging host set
+PASS  sw-f4    banner present
+PASS  sw-f4    secrets are placeholders, none in clear
+PASS  sw-f4    mgmt SVI 10.20.10.14
+PASS  sw-f4    not stp root (no priority 4096)
+PASS  sw-f4    room 401 on Gi1/0/1: access vlan 104, protected, port-sec, storm, bpduguard
+PASS  sw-f4    room 402 on Gi1/0/2: access vlan 104, protected, port-sec, storm, bpduguard
+PASS  sw-f4    room 403 on Gi1/0/3: access vlan 104, protected, port-sec, storm, bpduguard
+PASS  sw-f4    room 404 on Gi1/0/4: access vlan 104, protected, port-sec, storm, bpduguard
+PASS  sw-f4    room 405 on Gi1/0/5: access vlan 104, protected, port-sec, storm, bpduguard
+PASS  sw-f4    room 406 on Gi1/0/6: access vlan 104, protected, port-sec, storm, bpduguard
+PASS  sw-f4    room 407 on Gi1/0/7: access vlan 104, protected, port-sec, storm, bpduguard
+PASS  sw-f4    room 408 on Gi1/0/8: access vlan 104, protected, port-sec, storm, bpduguard
+PASS  sw-f4    room 409 on Gi1/0/9: access vlan 104, protected, port-sec, storm, bpduguard
+PASS  sw-f4    room 410 on Gi1/0/10: access vlan 104, protected, port-sec, storm, bpduguard
+PASS  sw-f4    room 411 on Gi1/0/11: access vlan 104, protected, port-sec, storm, bpduguard
+PASS  sw-f4    room 412 on Gi1/0/12: access vlan 104, protected, port-sec, storm, bpduguard
+PASS  sw-f4    exactly 12 ports in vlan 104
+PASS  sw-f4    ap-f4-a Gi1/0/13 trunk native 10 allowed {10,40,104}
+PASS  sw-f4    ap-f4-b Gi1/0/14 trunk native 10 allowed {10,40,104}
+PASS  sw-f4    cctv Gi1/0/15 access vlan 30 + bpduguard
+PASS  sw-f4    cctv Gi1/0/16 access vlan 30 + bpduguard
+PASS  sw-f4    cctv Gi1/0/17 access vlan 30 + bpduguard
+PASS  sw-f4    cctv Gi1/0/18 access vlan 30 + bpduguard
+PASS  sw-f4    uplink Gi1/0/24 trunk allowed exactly {10,30,40,104}
+PASS  sw-f4    uplink never carries staff/other floors' tenant vlans
+PASS  sw-f4    uplink native vlan is blackhole
+PASS  sw-f4    uplink dhcp snooping trust
+PASS  sw-f4    no 'allowed vlan all'
+PASS  sw-f4    spare ports 19-23 shutdown in blackhole vlan
+PASS  sw-f4    all 24 ports configured
+PASS  sw-f4    vlan list is only 10,30,40,tenant,999
+PASS  sw-f4    dhcp snooping vlans
+PASS  sw-f5    hostname matches plan
+PASS  sw-f5    rapid-pvst
+PASS  sw-f5    no telnet anywhere
+PASS  sw-f5    vty transport input ssh only
+PASS  sw-f5    vty access-class applied
+PASS  sw-f5    ssh v2
+PASS  sw-f5    http server off
+PASS  sw-f5    aaa local login
+PASS  sw-f5    snmp v3 only (no community)
+PASS  sw-f5    ntp server is fw
+PASS  sw-f5    logging host set
+PASS  sw-f5    banner present
+PASS  sw-f5    secrets are placeholders, none in clear
+PASS  sw-f5    mgmt SVI 10.20.10.15
+PASS  sw-f5    not stp root (no priority 4096)
+PASS  sw-f5    room 501 on Gi1/0/1: access vlan 105, protected, port-sec, storm, bpduguard
+PASS  sw-f5    room 502 on Gi1/0/2: access vlan 105, protected, port-sec, storm, bpduguard
+PASS  sw-f5    room 503 on Gi1/0/3: access vlan 105, protected, port-sec, storm, bpduguard
+PASS  sw-f5    room 504 on Gi1/0/4: access vlan 105, protected, port-sec, storm, bpduguard
+PASS  sw-f5    room 505 on Gi1/0/5: access vlan 105, protected, port-sec, storm, bpduguard
+PASS  sw-f5    room 506 on Gi1/0/6: access vlan 105, protected, port-sec, storm, bpduguard
+PASS  sw-f5    room 507 on Gi1/0/7: access vlan 105, protected, port-sec, storm, bpduguard
+PASS  sw-f5    room 508 on Gi1/0/8: access vlan 105, protected, port-sec, storm, bpduguard
+PASS  sw-f5    room 509 on Gi1/0/9: access vlan 105, protected, port-sec, storm, bpduguard
+PASS  sw-f5    room 510 on Gi1/0/10: access vlan 105, protected, port-sec, storm, bpduguard
+PASS  sw-f5    room 511 on Gi1/0/11: access vlan 105, protected, port-sec, storm, bpduguard
+PASS  sw-f5    room 512 on Gi1/0/12: access vlan 105, protected, port-sec, storm, bpduguard
+PASS  sw-f5    exactly 12 ports in vlan 105
+PASS  sw-f5    ap-f5-a Gi1/0/13 trunk native 10 allowed {10,40,105}
+PASS  sw-f5    ap-f5-b Gi1/0/14 trunk native 10 allowed {10,40,105}
+PASS  sw-f5    cctv Gi1/0/15 access vlan 30 + bpduguard
+PASS  sw-f5    cctv Gi1/0/16 access vlan 30 + bpduguard
+PASS  sw-f5    cctv Gi1/0/17 access vlan 30 + bpduguard
+PASS  sw-f5    cctv Gi1/0/18 access vlan 30 + bpduguard
+PASS  sw-f5    uplink Gi1/0/24 trunk allowed exactly {10,30,40,105}
+PASS  sw-f5    uplink never carries staff/other floors' tenant vlans
+PASS  sw-f5    uplink native vlan is blackhole
+PASS  sw-f5    uplink dhcp snooping trust
+PASS  sw-f5    no 'allowed vlan all'
+PASS  sw-f5    spare ports 19-23 shutdown in blackhole vlan
+PASS  sw-f5    all 24 ports configured
+PASS  sw-f5    vlan list is only 10,30,40,tenant,999
+PASS  sw-f5    dhcp snooping vlans
+PASS  fw-edge  v10-mgmt: vlanid 10, ip 10.20.10.1/24 on lag-core
+PASS  fw-edge  admin access (https/ssh/snmp) only on MGMT interface
+PASS  fw-edge  v20-staff: vlanid 20, ip 10.20.20.1/24 on lag-core
+PASS  fw-edge  v20-staff: no admin access
+PASS  fw-edge  v30-cctv: vlanid 30, ip 10.20.30.1/24 on lag-core
+PASS  fw-edge  v30-cctv: no admin access
+PASS  fw-edge  v40-guest: vlanid 40, ip 10.20.40.1/24 on lag-core
+PASS  fw-edge  v40-guest: no admin access
+PASS  fw-edge  v101-tenant-f1: vlanid 101, ip 10.21.1.1/24 on lag-core
+PASS  fw-edge  v101-tenant-f1: no admin access
+PASS  fw-edge  v102-tenant-f2: vlanid 102, ip 10.21.2.1/24 on lag-core
+PASS  fw-edge  v102-tenant-f2: no admin access
+PASS  fw-edge  v103-tenant-f3: vlanid 103, ip 10.21.3.1/24 on lag-core
+PASS  fw-edge  v103-tenant-f3: no admin access
+PASS  fw-edge  v104-tenant-f4: vlanid 104, ip 10.21.4.1/24 on lag-core
+PASS  fw-edge  v104-tenant-f4: no admin access
+PASS  fw-edge  v105-tenant-f5: vlanid 105, ip 10.21.5.1/24 on lag-core
+PASS  fw-edge  v105-tenant-f5: no admin access
+PASS  fw-edge  lag-core aggregate with lacp active
+PASS  fw-edge  wan interfaces: no admin access
+PASS  fw-edge  captive portal on GUEST
+PASS  fw-edge  dhcp servers exactly on dhcp:true vlans (7)
+PASS  fw-edge  admin trusthost = MGMT subnet only
+PASS  fw-edge  admin lockout + tls1.2+
+PASS  fw-edge  snmp v3 auth-priv user, no community
+PASS  fw-edge  sd-wan members wan1+wan2 with health-check
+PASS  fw-edge  static default via sd-wan zone
+PASS  fw-edge  dial-up ipsec phase1 on each wan, dynamic, in pool
+PASS  fw-edge  phase2 for every phase1
+PASS  fw-edge  vpn split-include = MGMT+CCTV only
+PASS  fw-edge  yaml policy 1 (TENANT-* -> internet allow) has policy with action accept
+PASS  fw-edge  yaml policy 2 (TENANT-* -> TENANT-* deny) has policy with action deny
+PASS  fw-edge  yaml policy 3 (TENANT-* -> ['MGMT', 'STAFF', 'CCTV', 'GUEST'] deny) has policy with action deny
+PASS  fw-edge  yaml policy 4 (GUEST -> internet allow) has policy with action accept
+PASS  fw-edge  yaml policy 5 (GUEST -> rfc1918 deny) has policy with action deny
+PASS  fw-edge  yaml policy 6 (STAFF -> internet allow) has policy with action accept
+PASS  fw-edge  yaml policy 7 (STAFF -> CCTV allow) has policy with action accept
+PASS  fw-edge  yaml policy 8 (CCTV -> internet deny) has policy with action deny
+PASS  fw-edge  yaml policy 9 (OWNER-VPN -> ['MGMT', 'CCTV'] allow) has policy with action accept
+PASS  fw-edge  yaml policy 10 (MGMT -> internet allow) has policy with action accept
+PASS  fw-edge  last policy is catch-all deny
+PASS  fw-edge  nat only on internet-bound accepts
+PASS  fw-edge  per-ip shaper TENANT-* 100/50 Mbps per room: shaping-policy applied at 100000 kbps
+PASS  fw-edge  per-ip shaper GUEST 20/10 Mbps per client: shaping-policy applied at 20000 kbps
+PASS  fw-edge  flow tenant f1 -> internet 443: accept
+PASS  fw-edge  flow tenant f1 -> tenant f2: deny
+PASS  fw-edge  flow tenant f3 -> tenant f5: deny
+PASS  fw-edge  flow tenant -> MGMT: deny
+PASS  fw-edge  flow tenant -> STAFF: deny
+PASS  fw-edge  flow tenant -> CCTV nvr: deny
+PASS  fw-edge  flow tenant -> GUEST: deny
+PASS  fw-edge  flow guest -> internet: accept
+PASS  fw-edge  flow guest -> MGMT: deny
+PASS  fw-edge  flow guest -> STAFF: deny
+PASS  fw-edge  flow guest -> 172.16.0.1: deny
+PASS  fw-edge  flow guest -> tenant: deny
+PASS  fw-edge  flow staff -> internet: accept
+PASS  fw-edge  flow staff -> cctv 443: accept
+PASS  fw-edge  flow staff -> cctv 554: accept
+PASS  fw-edge  flow staff -> cctv 22: deny
+PASS  fw-edge  flow staff -> MGMT: deny
+PASS  fw-edge  flow staff -> tenant: deny
+PASS  fw-edge  flow cctv -> internet: deny
+PASS  fw-edge  flow cctv -> staff: deny
+PASS  fw-edge  flow vpn -> MGMT: accept
+PASS  fw-edge  flow vpn(b) -> CCTV: accept
+PASS  fw-edge  flow vpn -> STAFF: deny
+PASS  fw-edge  flow vpn -> tenant: deny
+PASS  fw-edge  flow vpn -> internet: deny
+PASS  fw-edge  flow mgmt -> internet 443: accept
+PASS  fw-edge  flow mgmt -> internet 22: deny
+PASS  fw-edge  flow mgmt -> tenant: deny
+
+318/318 checks passed, 0 failed

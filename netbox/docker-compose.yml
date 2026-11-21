@@ -1,0 +1,29 @@
+# throwaway NetBox for the import test, port 8010, localhost only
+name: bcr-netbox
+services:
+  postgres:
+    image: postgres:18-alpine
+    environment: {POSTGRES_USER: netbox, POSTGRES_PASSWORD: netbox-test, POSTGRES_DB: netbox}
+  valkey:
+    image: valkey/valkey:9.1-alpine
+    command: valkey-server --requirepass valkey-test
+  netbox:
+    image: netboxcommunity/netbox:v4.7-5.1.2
+    depends_on: [postgres, valkey]
+    ports: ["127.0.0.1:8010:8080"]
+    environment:
+      DB_HOST: postgres
+      DB_NAME: netbox
+      DB_USER: netbox
+      DB_PASSWORD: netbox-test
+      REDIS_HOST: valkey
+      REDIS_PASSWORD: valkey-test
+      REDIS_CACHE_HOST: valkey
+      REDIS_CACHE_PASSWORD: valkey-test
+      SECRET_KEY: test-only-secret-key-test-only-secret-key-test-only-1234567890
+      API_TOKEN_PEPPER_1: test-only-pepper-test-only-pepper-test-only-pepper-123456
+      ALLOWED_HOSTS: "*"
+      SKIP_SUPERUSER: "false"
+      SUPERUSER_NAME: admin
+      SUPERUSER_PASSWORD: admin-test
+      SUPERUSER_EMAIL: admin@example.invalid

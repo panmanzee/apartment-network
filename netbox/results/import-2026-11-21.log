@@ -1,0 +1,54 @@
+# NetBox import test 2026-11-21, image netboxcommunity/netbox:v4.7-5.1.2, simulated data
+ Container bcr-netbox-postgres-1  Starting
+ Container bcr-netbox-postgres-1  Started
+ Container bcr-netbox-valkey-1  Started
+ Container bcr-netbox-netbox-1  Starting
+ Container bcr-netbox-netbox-1  Started
+netbox up after 44 checks
+token 1 1 True True
+## run 1
+site             created=   1 existing=   0
+manufacturer     created=   3 existing=   0
+device_role      created=   7 existing=   0
+device_type      created=   7 existing=   0
+vlan             created=  10 existing=   0
+prefix           created=  11 existing=   0
+device           created=  44 existing=   0
+interface        created= 169 existing=   0
+ip_address       created=  56 existing=   0
+primary_ip4_set  created=  44 existing=   0
+TOTAL created=352
+## run 2
+site             created=   0 existing=   1
+manufacturer     created=   0 existing=   3
+device_role      created=   0 existing=   7
+device_type      created=   0 existing=   7
+vlan             created=   0 existing=  10
+prefix           created=   0 existing=  11
+device           created=   0 existing=  44
+interface        created=   0 existing= 169
+ip_address       created=   0 existing=  56
+primary_ip4_set  created=   0 existing=  44
+TOTAL created=0
+export written results/export-2026-11-21.json
+ Container bcr-netbox-valkey-1  Removed
+ Container bcr-netbox-postgres-1  Stopped
+ Container bcr-netbox-postgres-1  Removing
+ Container bcr-netbox-postgres-1  Removed
+ Network bcr-netbox_default  Removing
+ Network bcr-netbox_default  Removed
+## stack removed, containers left on PC:
+clab-apt-owner
+clab-apt-room101
+clab-apt-cam
+clab-apt-internet
+clab-apt-room102
+clab-apt-room103
+clab-apt-isp
+clab-apt-mgmtpc
+clab-apt-fw-edge
+clab-apt-staff
+clab-apt-guest
+clab-apt-sw-f1
+clab-apt-sw-core
+clab-apt-nvr

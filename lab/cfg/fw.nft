@@ -1,0 +1,55 @@
+flush ruleset
+
+define RFC1918 = { 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16 }
+
+table inet fw {
+  chain input {
+    type filter hook input priority 0; policy drop;
+    ct state established,related accept
+    iifname "lo" accept
+    iifname "eth2" udp dport 51820 accept
+    iifname "eth2" icmp type echo-request accept
+    # each lan only pings its own gateway address
+    iifname "vlan10"  ip daddr 10.20.10.1 icmp type echo-request accept
+    iifname "vlan20"  ip daddr 10.20.20.1 icmp type echo-request accept
+    iifname "vlan30"  ip daddr 10.20.30.1 icmp type echo-request accept
+    iifname "vlan40"  ip daddr 10.20.40.1 icmp type echo-request accept
+    iifname "vlan101" ip daddr 10.21.1.1  icmp type echo-request accept
+    # owner vpn can manage the firewall itself
+    iifname "wg0" ip daddr 10.20.10.1 accept
+    iifname "wg0" ip daddr 10.20.50.1 icmp type echo-request accept
+  }
+
+  chain forward {
+    type filter hook forward priority 0; policy drop;
+    ct state established,related accept
+
+    # owner vpn: mgmt + cctv only
+    iifname "wg0" oifname { "vlan10", "vlan30" } counter accept
+
+    # cctv never reaches the internet or anything else
+    iifname "vlan30" counter drop
+
+    # staff -> cctv only 443/554
+    iifname "vlan20" oifname "vlan30" tcp dport { 443, 554 } counter accept
+    iifname "vlan20" oifname "eth2" counter accept
+
+    # mgmt -> internet (updates)
+    iifname "vlan10" oifname "eth2" counter accept
+
+    # guest: internet only, no rfc1918 anywhere
+    iifname "vlan40" ip daddr $RFC1918 counter drop
+    iifname "vlan40" oifname "eth2" counter accept
+
+    # tenants: internet only
+    iifname "vlan101" ip daddr $RFC1918 counter drop
+    iifname "vlan101" oifname "eth2" counter accept
+  }
+}
+
+table ip nat {
+  chain postrouting {
+    type nat hook postrouting priority 100;
+    oifname "eth2" masquerade
+  }
+}
