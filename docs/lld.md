@@ -223,7 +223,7 @@ AP management is on MGMT 10 (untagged on the AP port). Each AP port carries its 
 | FW-07 | GUEST | internet | allow | shaper 20/10 Mbps per client | SNAT to WAN | off |
 | FW-08 | TENANT-* | MGMT, STAFF, CCTV, GUEST | deny | - | none | log |
 | FW-09 | TENANT-* | TENANT-* | deny | - | none | log |
-| FW-10 | TENANT-* | internet | allow | shaper 100/50 Mbps per room | SNAT to WAN | off |
+| FW-10 | TENANT-* | internet | allow | shaper 100/50 Mbps per device (per-IP) | SNAT to WAN | off |
 | FW-11 | any | any | deny | implicit default | none | log |
 
 - `internet` = anything outside RFC1918. `rfc1918` = 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16.

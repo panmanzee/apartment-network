@@ -71,7 +71,7 @@ Meraki would add a yearly licence per AP (not priced).
 - Staff: one Omada controller (OC200) shows switches, APs and router in one page, with captive portal for the lobby guest Wi-Fi and per-client rate limit. Cisco CBW150AX plus C1000 switches are 2 different tools and the C1000 is CLI work.
 - Local support: all TP-Link items I found are sold by many Thai shops (advice, jib-type retailers) with lifetime or 3-year warranty, so a spare can be bought same day. Cisco is also easy to buy in Thailand. Huawei switches and APs: I could not find a single Thai shop price, so support is unclear.
 - Weak points of C: ER8411 is a router with SPI firewall, no UTP. The 24-port switch PoE budget (384W) is more than the floor needs (about 50W). The SG3428XMP price came from an aggregator card, so confirm with the shop.
-- A is the "name on the CV" option and its price is all Thai-listed. B is left as a comparison only until a Thai quote exists.
+- A is the "name on the CV" option and its price is Thai-listed except the SFP modules (13,060, converted from EUR). B is left as a comparison only until a Thai quote exists.
 
 ## Known gaps
 - Converted: Huawei S5735 (HKD), AirEngine 5761-11W (USD), SFP modules (EUR), Palo Alto lines (USD/HKD).

@@ -8,7 +8,7 @@ Source of truth for addresses and rules: `plan/ip-plan.yaml`. Details are in `ll
 
 | Decision | Choice | Why |
 |---|---|---|
-| Where inter-VLAN routing happens | On fw-edge (FortiGate). sw-core is layer 2 only. | Every VLAN gateway is on the firewall, so every rule is in one place and denied traffic is logged in full and allowed traffic logs security events. Fits R2-R13. |
+| Where inter-VLAN routing happens | On fw-edge (FortiGate). sw-core is layer 2 only. | Every VLAN gateway is on the firewall, so every rule is in one place. Denied traffic is logged in full (logtraffic all). Allow rules are set to logtraffic utm, but no security profile is applied in the rendered config, so allowed traffic is not logged yet. Fits R2-R13. |
 | What the transit /30 is | 10.20.0.0/30, fw-edge .1, sw-core .2, in the yaml. Not used: the core is L2, so nothing is routed over it. VLAN 999 is an unused native/parking VLAN on the trunks, no user traffic. | The yaml has a transit net, but with an L2 core there is no place for it. sw-core is managed on VLAN 10 (10.20.10.2). |
 | Room isolation | Protected ports on the switches plus client isolation on Wi-Fi | One subnet per floor, so the switch must block room to room. R4. |
 | Tenant Wi-Fi | One SSID per floor, WPA2/WPA3 personal, client isolation | Simple for the owner. No RADIUS server to run. R15. |

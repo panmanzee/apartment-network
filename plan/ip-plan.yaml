@@ -56,7 +56,7 @@ access_ports:
 
 policy:
   # src -> dst : action
-  - {src: TENANT-*, dst: internet, action: allow, shape: 100/50 Mbps per room}
+  - {src: TENANT-*, dst: internet, action: allow, shape: 100/50 Mbps per device (per-IP)}
   - {src: TENANT-*, dst: TENANT-*, action: deny}
   - {src: TENANT-*, dst: [MGMT, STAFF, CCTV, GUEST], action: deny}
   - {src: GUEST, dst: internet, action: allow, shape: 20/10 Mbps per client}

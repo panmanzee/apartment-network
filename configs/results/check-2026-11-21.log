@@ -303,7 +303,7 @@ PASS  fw-edge  yaml policy 9 (OWNER-VPN -> ['MGMT', 'CCTV'] allow) has policy wi
 PASS  fw-edge  yaml policy 10 (MGMT -> internet allow) has policy with action accept
 PASS  fw-edge  last policy is catch-all deny
 PASS  fw-edge  nat only on internet-bound accepts
-PASS  fw-edge  per-ip shaper TENANT-* 100/50 Mbps per room: shaping-policy applied at 100000 kbps
+PASS  fw-edge  per-ip shaper TENANT-* 100/50 Mbps per device (per-IP): shaping-policy applied at 100000 kbps
 PASS  fw-edge  per-ip shaper GUEST 20/10 Mbps per client: shaping-policy applied at 20000 kbps
 PASS  fw-edge  flow tenant f1 -> internet 443: accept
 PASS  fw-edge  flow tenant f1 -> tenant f2: deny

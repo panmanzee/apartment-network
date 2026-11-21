@@ -5,4 +5,4 @@ d4a52d7e9aff795433582d67e439f709  out/cisco/sw-f1.cfg
 5cefe3fe02647a775af5bd491449fad2  out/cisco/sw-f3.cfg
 8542ad7f97fd3fe1f347e4257069598b  out/cisco/sw-f4.cfg
 2f19d5bf2ada9d9c892b912a1da226af  out/cisco/sw-f5.cfg
-8c012eb98b697be9b9c85383e5ae8bf3  out/fortigate/fw-edge.conf
+c5beabbd018b71317fb23288e458b79a  out/fortigate/fw-edge.conf
