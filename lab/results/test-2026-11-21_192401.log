@@ -1,0 +1,129 @@
+# apartment-network lab tests  2026-11-21T19:24:01+07:00
+# kernel 6.6.87.2-microsoft-standard-WSL2
+
+== 0 sanity: gateways + internet
+PASS  room101 -> gw 10.21.1.1
+PASS  room101 -> internet 8.8.8.8
+PASS  room101 -> internet web 198.51.100.8
+PASS  room101 -> internet tcp/443
+
+== 1 VLAN isolation
+PASS  tenant room101 -> 10.20.20.50 blocked (icmp)
+PASS  tenant room101 -> 10.20.30.10 blocked (icmp)
+PASS  tenant room101 -> 10.20.30.20 blocked (icmp)
+PASS  tenant room101 -> 10.20.10.50 blocked (icmp)
+PASS  tenant room101 -> 10.20.10.2 blocked (icmp)
+PASS  tenant room101 -> 10.20.10.1 blocked (icmp)
+PASS  tenant room101 -> 10.20.20.1 blocked (icmp)
+PASS  tenant -> nvr tcp/443 blocked
+PASS  tenant -> nvr tcp/554 blocked
+PASS  tenant -> guest 10.20.40.100 blocked
+PASS  staff -> nvr tcp/443 allowed
+PASS  staff -> nvr tcp/554 allowed
+PASS  staff -> nvr tcp/80 blocked
+PASS  staff -> nvr tcp/22 blocked
+PASS  staff -> nvr tcp/8080 blocked
+PASS  staff -> nvr icmp blocked
+PASS  staff -> internet
+PASS  staff -> tenant room101 blocked
+PASS  staff -> mgmt-pc blocked
+
+== 2 per-room isolation (sw-f1 isolated ports = protected)
+PASS  room101 -> room102 ping blocked
+PASS  room102 -> room101 ping blocked
+PASS  room101 -> room103 ping blocked
+PASS  room101 -> room102 arping blocked
+PASS  room103 -> room102 arping blocked
+PASS  room101 -> gateway
+PASS  room101 -> internet 8.8.8.8
+PASS  room102 -> gateway
+PASS  room102 -> internet 8.8.8.8
+PASS  room103 -> gateway
+PASS  room103 -> internet 8.8.8.8
+PASS  control: isolation off -> room101 reaches room102
+PASS  isolation restored -> room101 blocked again
+-- sw-f1 bridge port isolated flag (sysfs):
+   eth1 isolated=0
+   eth2 isolated=1
+   eth3 isolated=1
+   eth4 isolated=1
+
+== 3 guest internet-only
+PASS  guest -> internet 8.8.8.8
+PASS  guest -> internet tcp/80
+PASS  guest -> own gateway
+PASS  guest -> 10.20.10.1 blocked
+PASS  guest -> 10.20.10.2 blocked
+PASS  guest -> 10.20.10.50 blocked
+PASS  guest -> 10.20.20.50 blocked
+PASS  guest -> 10.20.30.10 blocked
+PASS  guest -> 10.21.1.11 blocked
+PASS  guest -> 10.20.20.1 blocked
+PASS  guest -> 172.16.0.1 blocked
+PASS  guest -> 192.168.1.1 blocked
+PASS  guest -> 192.168.100.5 blocked
+PASS  guest -> nvr tcp/443 blocked
+
+== 6 cctv no internet
+PASS  cam -> internet 8.8.8.8 blocked
+PASS  cam -> internet tcp/80 blocked
+PASS  nvr -> internet 8.8.8.8 blocked
+PASS  cam -> staff blocked
+PASS  cam -> tenant blocked
+PASS  cam -> nvr (same vlan)
+
+== 5 owner VPN
+PASS  no vpn: owner -> 10.20.30.10 unreachable
+PASS  no vpn: owner -> 10.20.10.1 unreachable
+PASS  no vpn: owner -> 10.20.10.50 unreachable
+PASS  no vpn: owner -> 10.20.10.2 unreachable
+PASS  no vpn: owner -> 10.21.1.11 unreachable
+PASS  no vpn: owner -> 10.20.20.50 unreachable
+PASS  no vpn: owner -> 10.20.50.1 unreachable
+PASS  no vpn: owner -> nvr tcp/443
+PASS  no vpn: owner -> fw wan 203.0.113.2 (public edge only)
+-- wg show (fw):
+   peer: 3Jr5vrjyPOX8L4LYem5YzsocLB6La851SFaRUa1u/nE=
+     endpoint: 192.0.2.10:33973
+     latest handshake: 3 seconds ago
+     transfer: 180 B received, 92 B sent
+PASS  vpn: owner -> fw tunnel 10.20.50.1
+PASS  vpn: owner -> fw mgmt 10.20.10.1
+PASS  vpn: owner -> mgmt-pc 10.20.10.50
+PASS  vpn: owner -> sw-core mgmt 10.20.10.2
+PASS  vpn: owner -> sw-f1 mgmt 10.20.10.11
+PASS  vpn: owner -> nvr 10.20.30.10
+PASS  vpn: owner -> nvr tcp/443
+PASS  vpn: owner -> nvr tcp/554
+PASS  vpn: owner -> tenant 10.21.1.11 blocked (no route)
+PASS  vpn: owner -> staff 10.20.20.50 blocked (no route)
+PASS  vpn forced route: owner -> tenant 10.21.1.11 dropped by fw
+PASS  vpn forced route: owner -> staff 10.20.20.50 dropped by fw
+PASS  vpn forced route: owner -> guest 10.20.40.100 dropped by fw
+PASS  vpn down again: owner -> nvr unreachable
+
+== 4 bandwidth (iperf3 -> internet 198.51.100.8, 8s)
+MEASURED tenant room101 (plan 100/50) upload=49.7 Mbps download=99.3 Mbps
+PASS  tenant room101 (plan 100/50) download 99.3 Mbps within [85,105]
+PASS  tenant room101 (plan 100/50) upload 49.7 Mbps within [40,53]
+MEASURED tenant room102 (plan 100/50) upload=49.6 Mbps download=99.3 Mbps
+PASS  tenant room102 (plan 100/50) download 99.3 Mbps within [85,105]
+PASS  tenant room102 (plan 100/50) upload 49.6 Mbps within [40,53]
+MEASURED guest (plan 20/10) upload=9.9 Mbps download=19.9 Mbps
+PASS  guest (plan 20/10) download 19.9 Mbps within [17,21]
+PASS  guest (plan 20/10) upload 9.9 Mbps within [8,11]
+-- fw tc stats ifb0 (upload, room101):
+   class htb 1:11 root leaf 8002: prio 0 rate 50Mbit ceil 50Mbit burst 1600b cburst 1600b 
+    Sent 50514016 bytes 11741 pkt (dropped 0, overlimits 5268 requeues 0) 
+
+-- nft counters on fw (drops that proved the policy):
+   		iifname "wg0" oifname { "vlan10", "vlan30" } counter packets 6 bytes 456 accept
+   		iifname "vlan30" counter packets 10 bytes 792 drop
+   		iifname "vlan20" oifname "vlan30" tcp dport { 443, 554 } counter packets 2 bytes 120 accept
+   		iifname "vlan20" oifname "eth2" counter packets 1 bytes 84 accept
+   		iifname "vlan40" ip daddr { 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16 } counter packets 18 bytes 1464 drop
+   		iifname "vlan40" oifname "eth2" counter packets 6 bytes 384 accept
+   		iifname "vlan101" ip daddr { 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16 } counter packets 16 bytes 1248 drop
+   		iifname "vlan101" oifname "eth2" counter packets 14 bytes 960 accept
+
+SUMMARY 85 passed, 0 failed

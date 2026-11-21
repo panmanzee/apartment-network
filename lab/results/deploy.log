@@ -1,0 +1,95 @@
+19:23:55 INFO Containerlab started version=0.83.0
+19:23:55 INFO Parsing & checking topology file=apartment.clab.yml
+19:23:55 INFO Removing directory path=/root/net/apartment-network/lab/clab-apt
+19:23:55 INFO Creating docker network name=apt-mgmt IPv4 subnet=172.31.99.0/24 IPv6 subnet="" MTU=0
+19:23:55 INFO Creating lab directory path=/root/net/apartment-network/lab/clab-apt
+19:23:55 INFO Creating container name=internet
+19:23:55 INFO Creating container name=sw-core
+19:23:55 INFO Creating container name=sw-f1
+19:23:55 INFO Creating container name=room102
+19:23:55 INFO Creating container name=mgmtpc
+19:23:55 INFO Creating container name=room101
+19:23:55 INFO Creating container name=guest
+19:23:55 INFO Creating container name=nvr
+19:23:55 INFO Creating container name=cam
+19:23:55 INFO Creating container name=room103
+19:23:55 INFO Creating container name=isp
+19:23:55 INFO Creating container name=fw-edge
+19:23:55 INFO Creating container name=staff
+19:23:56 INFO Creating container name=owner
+19:23:56 INFO Created link: internet:eth1 ▪┄┄▪ isp:eth2
+19:23:56 INFO Created link: fw-edge:eth2 ▪┄┄▪ isp:eth1
+19:23:56 INFO Created link: sw-f1:eth2 ▪┄┄▪ room101:eth1
+19:23:57 INFO Created link: sw-f1:eth3 ▪┄┄▪ room102:eth1
+19:23:57 INFO Created link: sw-f1:eth4 ▪┄┄▪ room103:eth1
+19:23:57 INFO Created link: fw-edge:eth1 ▪┄┄▪ sw-core:eth1
+19:23:57 INFO Created link: sw-core:eth2 ▪┄┄▪ sw-f1:eth1
+19:23:57 INFO Created link: owner:eth1 ▪┄┄▪ isp:eth3
+19:23:57 INFO Created link: sw-core:eth3 ▪┄┄▪ staff:eth1
+19:23:57 INFO Created link: sw-core:eth4 ▪┄┄▪ guest:eth1
+19:23:57 INFO Created link: sw-core:eth5 ▪┄┄▪ cam:eth1
+19:23:57 INFO Created link: sw-core:eth6 ▪┄┄▪ nvr:eth1
+19:23:57 INFO Created link: sw-core:eth7 ▪┄┄▪ mgmtpc:eth1
+19:23:58 INFO Executed command node=room102 command="bash /cfg/host.sh 10.21.1.12/24 10.21.1.1" stdout=""
+19:23:58 INFO Executed command node=room103 command="bash /cfg/host.sh 10.21.1.13/24 10.21.1.1" stdout=""
+19:23:58 INFO Executed command node=internet command="bash /cfg/internet.sh" stdout=""
+19:23:58 INFO Executed command node=room101 command="bash /cfg/host.sh 10.21.1.11/24 10.21.1.1" stdout=""
+19:23:58 INFO Executed command node=isp command="bash /cfg/isp.sh" stdout=""
+19:23:58 INFO Executed command node=mgmtpc command="bash /cfg/host.sh 10.20.10.50/24 10.20.10.1" stdout=""
+19:23:58 INFO Executed command node=guest command="bash /cfg/host.sh 10.20.40.100/24 10.20.40.1" stdout=""
+19:23:58 INFO Executed command node=staff command="bash /cfg/host.sh 10.20.20.50/24 10.20.20.1" stdout=""
+19:23:58 INFO Executed command node=nvr command="bash /cfg/host.sh 10.20.30.10/24 10.20.30.1" stdout=""
+19:23:58 INFO Executed command node=nvr command="bash /cfg/nvr.sh" stdout=""
+19:23:58 INFO Executed command node=cam command="bash /cfg/host.sh 10.20.30.20/24 10.20.30.1" stdout=""
+19:23:58 INFO Executed command node=owner command="bash /cfg/owner.sh" stdout=""
+19:23:58 INFO Executed command node=sw-f1 command="bash /cfg/sw-f1.sh" stdout=""
+19:23:58 INFO Executed command node=sw-core command="bash /cfg/sw-core.sh" stdout=""
+19:23:58 INFO Executed command node=fw-edge command="bash /cfg/fw-edge.sh" stdout=""
+19:23:58 INFO Adding host entries path=/etc/hosts
+19:23:58 INFO Adding SSH config for nodes path=/etc/ssh/ssh_config.d/clab-apt.conf
+[1m╭[0m[1m───────────────────[0m[1m┬[0m[1m────────────────[0m[1m┬[0m[1m─────────[0m[1m┬[0m[1m────────────────[0m[1m╮[0m
+[1m│[0m[1m        Name       [0m[1m│[0m[1m   Kind/Image   [0m[1m│[0m[1m  State  [0m[1m│[0m[1m IPv4/6 Address [0m[1m│[0m
+[1m├[0m[1m───────────────────[0m[1m┼[0m[1m────────────────[0m[1m┼[0m[1m─────────[0m[1m┼[0m[1m────────────────[0m[1m┤[0m
+│ clab-apt-cam      │ linux          │ running │ 172.31.99.15   │
+│                   │ apt-lab:latest │         │ N/A            │
+├───────────────────┼────────────────┼─────────┼────────────────┤
+│ clab-apt-fw-edge  │ linux          │ running │ 172.31.99.7    │
+│                   │ apt-lab:latest │         │ N/A            │
+├───────────────────┼────────────────┼─────────┼────────────────┤
+│ clab-apt-guest    │ linux          │ running │ 172.31.99.8    │
+│                   │ apt-lab:latest │         │ N/A            │
+├───────────────────┼────────────────┼─────────┼────────────────┤
+│ clab-apt-internet │ linux          │ running │ 172.31.99.9    │
+│                   │ apt-lab:latest │         │ N/A            │
+├───────────────────┼────────────────┼─────────┼────────────────┤
+│ clab-apt-isp      │ linux          │ running │ 172.31.99.10   │
+│                   │ apt-lab:latest │         │ N/A            │
+├───────────────────┼────────────────┼─────────┼────────────────┤
+│ clab-apt-mgmtpc   │ linux          │ running │ 172.31.99.2    │
+│                   │ apt-lab:latest │         │ N/A            │
+├───────────────────┼────────────────┼─────────┼────────────────┤
+│ clab-apt-nvr      │ linux          │ running │ 172.31.99.11   │
+│                   │ apt-lab:latest │         │ N/A            │
+├───────────────────┼────────────────┼─────────┼────────────────┤
+│ clab-apt-owner    │ linux          │ running │ 172.31.99.3    │
+│                   │ apt-lab:latest │         │ N/A            │
+├───────────────────┼────────────────┼─────────┼────────────────┤
+│ clab-apt-room101  │ linux          │ running │ 172.31.99.4    │
+│                   │ apt-lab:latest │         │ N/A            │
+├───────────────────┼────────────────┼─────────┼────────────────┤
+│ clab-apt-room102  │ linux          │ running │ 172.31.99.5    │
+│                   │ apt-lab:latest │         │ N/A            │
+├───────────────────┼────────────────┼─────────┼────────────────┤
+│ clab-apt-room103  │ linux          │ running │ 172.31.99.12   │
+│                   │ apt-lab:latest │         │ N/A            │
+├───────────────────┼────────────────┼─────────┼────────────────┤
+│ clab-apt-staff    │ linux          │ running │ 172.31.99.6    │
+│                   │ apt-lab:latest │         │ N/A            │
+├───────────────────┼────────────────┼─────────┼────────────────┤
+│ clab-apt-sw-core  │ linux          │ running │ 172.31.99.13   │
+│                   │ apt-lab:latest │         │ N/A            │
+├───────────────────┼────────────────┼─────────┼────────────────┤
+│ clab-apt-sw-f1    │ linux          │ running │ 172.31.99.14   │
+│                   │ apt-lab:latest │         │ N/A            │
+╰───────────────────┴────────────────┴─────────┴────────────────╯
+deployed
