@@ -23,7 +23,9 @@ other's devices, CCTV not reachable from outside, worry that tenants/guests can 
 ## Lab
 
 Free images only: Debian containers with Linux bridge (VLAN filtering, isolated ports = protected ports),
-nftables firewall, tc HTB shaping, WireGuard for the owner VPN. It models the FortiGate policy, it is not FortiOS.
+nftables firewall, tc HTB shaping, WireGuard for the owner VPN. It models the policy in `plan/ip-plan.yaml`, not FortiOS.
+Differences from the FortiOS config: lab shaping is asymmetric tc (FortiOS per-IP shaper is one limit both ways),
+lab tenants are blocked from all RFC1918 incl. the WAN side, and the VPN is WireGuard instead of IPsec.
 
 ```
 cd lab
@@ -37,19 +39,19 @@ Needs docker + containerlab (ran on WSL2 Ubuntu, kernel 6.6).
 `lab/results/test-2026-11-21_192401.log`: **85 passed, 0 failed**
 
 - VLAN isolation: tenant cannot reach staff, CCTV, mgmt, guest; staff reaches NVR only on 443/554
-- per-room isolation: room101 <-> room102 ping and arping blocked; control test with isolation off shows it would work
-- guest: internet only, every RFC1918 target blocked
+- per-room isolation: room101 <-> room102 ping and arping blocked; control test (ping) with isolation off shows it would work
+- guest: internet only, all 10 private-address targets tested are blocked (fw drop counter confirms)
 - CCTV: no internet
 - owner VPN: without tunnel nothing inside is reachable; with tunnel mgmt + NVR only; forced routes to tenant/staff/guest are dropped by the firewall
 - bandwidth (iperf3, 8 s): tenant 99.3 down / 49.7 up Mbps (plan 100/50), guest 19.9 / 9.9 Mbps (plan 20/10)
 
 Other evidence:
 - `configs/results/check-2026-11-21.log`: 318/318 static checks on the rendered configs; `ansible-lint` 0 failures
-- `netbox/results/import-2026-11-21.log`: 352 objects imported, second run creates nothing (idempotent)
+- `netbox/results/import-2026-11-21.log`: 308 objects created + 44 primary-IP assignments, second run creates nothing (idempotent)
 
 ## Not done / limits
 
 - FortiOS and IOS configs were **not** run on real devices or vendor VMs (FortiGate-VM, CML and Packet Tracer
   need vendor accounts). Known gaps are listed in `configs/README.md` (e.g. FortiOS per-IP shaper is one limit for both directions).
 - Lab covers one floor; the other 4 floors use the same config with a different VLAN.
-- BOM prices are retail listings, some converted from foreign shops (marked in `bom/bom.md`).
+- BOM prices are retail listings, some converted from foreign shops (option B is ~65% converted; marked in `bom/bom.md`).
