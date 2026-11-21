@@ -1,0 +1,68 @@
+# simulated client: Baan Chalong Residence (fictional), Lat Krabang, Bangkok
+site:
+  name: Baan Chalong Residence
+  slug: baan-chalong
+  floors: 5
+  rooms_per_floor: 12
+  rooms: 60
+  isp:
+    primary: {name: ISP-A FTTx 1000/500, wan: dhcp}
+    backup: {name: ISP-B FTTx 500/500, wan: dhcp}
+
+vlans:
+  - {id: 10,  name: MGMT,   subnet: 10.20.10.0/24, gw: 10.20.10.1, dhcp: false, desc: switches, APs, firewall mgmt}
+  - {id: 20,  name: STAFF,  subnet: 10.20.20.0/24, gw: 10.20.20.1, dhcp: true,  desc: office PCs, printer, POS}
+  - {id: 30,  name: CCTV,   subnet: 10.20.30.0/24, gw: 10.20.30.1, dhcp: false, desc: 24 IP cameras + NVR, no internet}
+  - {id: 40,  name: GUEST,  subnet: 10.20.40.0/24, gw: 10.20.40.1, dhcp: true,  desc: lobby guest Wi-Fi, captive portal, internet only}
+  - {id: 101, name: TENANT-F1, subnet: 10.21.1.0/24, gw: 10.21.1.1, dhcp: true, desc: floor 1 rooms 101-112}
+  - {id: 102, name: TENANT-F2, subnet: 10.21.2.0/24, gw: 10.21.2.1, dhcp: true, desc: floor 2 rooms 201-212}
+  - {id: 103, name: TENANT-F3, subnet: 10.21.3.0/24, gw: 10.21.3.1, dhcp: true, desc: floor 3 rooms 301-312}
+  - {id: 104, name: TENANT-F4, subnet: 10.21.4.0/24, gw: 10.21.4.1, dhcp: true, desc: floor 4 rooms 401-412}
+  - {id: 105, name: TENANT-F5, subnet: 10.21.5.0/24, gw: 10.21.5.1, dhcp: true, desc: floor 5 rooms 501-512}
+
+vpn:
+  owner: {type: ipsec-or-wireguard, pool: 10.20.50.0/24, allowed: [MGMT, CCTV]}
+
+transit:
+  core_fw: 10.20.0.0/30   # core .2, firewall .1
+
+devices:
+  - {name: fw-edge,  role: firewall,    mgmt_ip: 10.20.10.1}
+  - {name: sw-core,  role: core-switch, mgmt_ip: 10.20.10.2}
+  - {name: sw-f1, role: access-switch, mgmt_ip: 10.20.10.11, floor: 1}
+  - {name: sw-f2, role: access-switch, mgmt_ip: 10.20.10.12, floor: 2}
+  - {name: sw-f3, role: access-switch, mgmt_ip: 10.20.10.13, floor: 3}
+  - {name: sw-f4, role: access-switch, mgmt_ip: 10.20.10.14, floor: 4}
+  - {name: sw-f5, role: access-switch, mgmt_ip: 10.20.10.15, floor: 5}
+  - {name: nvr-01,  role: nvr, mgmt_ip: 10.20.30.10}
+  - {name: ap-f1-a, role: ap, mgmt_ip: 10.20.10.31, floor: 1}
+  - {name: ap-f1-b, role: ap, mgmt_ip: 10.20.10.32, floor: 1}
+  - {name: ap-f2-a, role: ap, mgmt_ip: 10.20.10.33, floor: 2}
+  - {name: ap-f2-b, role: ap, mgmt_ip: 10.20.10.34, floor: 2}
+  - {name: ap-f3-a, role: ap, mgmt_ip: 10.20.10.35, floor: 3}
+  - {name: ap-f3-b, role: ap, mgmt_ip: 10.20.10.36, floor: 3}
+  - {name: ap-f4-a, role: ap, mgmt_ip: 10.20.10.37, floor: 4}
+  - {name: ap-f4-b, role: ap, mgmt_ip: 10.20.10.38, floor: 4}
+  - {name: ap-f5-a, role: ap, mgmt_ip: 10.20.10.39, floor: 5}
+  - {name: ap-f5-b, role: ap, mgmt_ip: 10.20.10.40, floor: 5}
+  - {name: ap-lobby, role: ap, mgmt_ip: 10.20.10.41, floor: 0}
+
+# access ports: room NNN -> port Gi1/0/(NNN%100) on sw-fN, untagged TENANT-FN, protected (no room-to-room)
+access_ports:
+  room_ports: 12
+  ap_ports: [13, 14]
+  cctv_ports: [15, 16, 17, 18]
+  uplink: 24
+
+policy:
+  # src -> dst : action
+  - {src: TENANT-*, dst: internet, action: allow, shape: 100/50 Mbps per room}
+  - {src: TENANT-*, dst: TENANT-*, action: deny}
+  - {src: TENANT-*, dst: [MGMT, STAFF, CCTV, GUEST], action: deny}
+  - {src: GUEST, dst: internet, action: allow, shape: 20/10 Mbps per client}
+  - {src: GUEST, dst: rfc1918, action: deny}
+  - {src: STAFF, dst: internet, action: allow}
+  - {src: STAFF, dst: CCTV, action: allow, ports: [443, 554]}
+  - {src: CCTV, dst: internet, action: deny}
+  - {src: OWNER-VPN, dst: [MGMT, CCTV], action: allow}
+  - {src: MGMT, dst: internet, action: allow, note: firmware updates only}
