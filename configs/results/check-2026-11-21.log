@@ -26,7 +26,9 @@ PASS  sw-core  Gi1/0/14 -> sw-f4 trunk list equals sw-f4 uplink list [10, 30, 40
 PASS  sw-core  Gi1/0/15 -> sw-f5 trunk list equals sw-f5 uplink list [10, 30, 40, 105]
 PASS  sw-core  nvr + 4 lobby cctv ports in vlan 30
 PASS  sw-core  staff ports in vlan 20
+PASS  sw-core  ap-lobby port is protected
 PASS  sw-core  ap-lobby trunk native 10 allowed {10,40}
+PASS  sw-core  mon-01 Gi1/0/3 and admin Gi1/0/4 in vlan 10
 PASS  sw-core  no tenant vlan reaches core access ports
 PASS  sw-core  all 24 ports configured
 PASS  sw-f1    hostname matches plan
@@ -56,8 +58,11 @@ PASS  sw-f1    room 109 on Gi1/0/9: access vlan 101, protected, port-sec, storm,
 PASS  sw-f1    room 110 on Gi1/0/10: access vlan 101, protected, port-sec, storm, bpduguard
 PASS  sw-f1    room 111 on Gi1/0/11: access vlan 101, protected, port-sec, storm, bpduguard
 PASS  sw-f1    room 112 on Gi1/0/12: access vlan 101, protected, port-sec, storm, bpduguard
+PASS  sw-f1    every room port and AP port is protected, uplink is not
 PASS  sw-f1    exactly 12 ports in vlan 101
+PASS  sw-f1    ap-f1-a Gi1/0/13 is protected
 PASS  sw-f1    ap-f1-a Gi1/0/13 trunk native 10 allowed {10,40,101}
+PASS  sw-f1    ap-f1-b Gi1/0/14 is protected
 PASS  sw-f1    ap-f1-b Gi1/0/14 trunk native 10 allowed {10,40,101}
 PASS  sw-f1    cctv Gi1/0/15 access vlan 30 + bpduguard
 PASS  sw-f1    cctv Gi1/0/16 access vlan 30 + bpduguard
@@ -99,8 +104,11 @@ PASS  sw-f2    room 209 on Gi1/0/9: access vlan 102, protected, port-sec, storm,
 PASS  sw-f2    room 210 on Gi1/0/10: access vlan 102, protected, port-sec, storm, bpduguard
 PASS  sw-f2    room 211 on Gi1/0/11: access vlan 102, protected, port-sec, storm, bpduguard
 PASS  sw-f2    room 212 on Gi1/0/12: access vlan 102, protected, port-sec, storm, bpduguard
+PASS  sw-f2    every room port and AP port is protected, uplink is not
 PASS  sw-f2    exactly 12 ports in vlan 102
+PASS  sw-f2    ap-f2-a Gi1/0/13 is protected
 PASS  sw-f2    ap-f2-a Gi1/0/13 trunk native 10 allowed {10,40,102}
+PASS  sw-f2    ap-f2-b Gi1/0/14 is protected
 PASS  sw-f2    ap-f2-b Gi1/0/14 trunk native 10 allowed {10,40,102}
 PASS  sw-f2    cctv Gi1/0/15 access vlan 30 + bpduguard
 PASS  sw-f2    cctv Gi1/0/16 access vlan 30 + bpduguard
@@ -142,8 +150,11 @@ PASS  sw-f3    room 309 on Gi1/0/9: access vlan 103, protected, port-sec, storm,
 PASS  sw-f3    room 310 on Gi1/0/10: access vlan 103, protected, port-sec, storm, bpduguard
 PASS  sw-f3    room 311 on Gi1/0/11: access vlan 103, protected, port-sec, storm, bpduguard
 PASS  sw-f3    room 312 on Gi1/0/12: access vlan 103, protected, port-sec, storm, bpduguard
+PASS  sw-f3    every room port and AP port is protected, uplink is not
 PASS  sw-f3    exactly 12 ports in vlan 103
+PASS  sw-f3    ap-f3-a Gi1/0/13 is protected
 PASS  sw-f3    ap-f3-a Gi1/0/13 trunk native 10 allowed {10,40,103}
+PASS  sw-f3    ap-f3-b Gi1/0/14 is protected
 PASS  sw-f3    ap-f3-b Gi1/0/14 trunk native 10 allowed {10,40,103}
 PASS  sw-f3    cctv Gi1/0/15 access vlan 30 + bpduguard
 PASS  sw-f3    cctv Gi1/0/16 access vlan 30 + bpduguard
@@ -185,8 +196,11 @@ PASS  sw-f4    room 409 on Gi1/0/9: access vlan 104, protected, port-sec, storm,
 PASS  sw-f4    room 410 on Gi1/0/10: access vlan 104, protected, port-sec, storm, bpduguard
 PASS  sw-f4    room 411 on Gi1/0/11: access vlan 104, protected, port-sec, storm, bpduguard
 PASS  sw-f4    room 412 on Gi1/0/12: access vlan 104, protected, port-sec, storm, bpduguard
+PASS  sw-f4    every room port and AP port is protected, uplink is not
 PASS  sw-f4    exactly 12 ports in vlan 104
+PASS  sw-f4    ap-f4-a Gi1/0/13 is protected
 PASS  sw-f4    ap-f4-a Gi1/0/13 trunk native 10 allowed {10,40,104}
+PASS  sw-f4    ap-f4-b Gi1/0/14 is protected
 PASS  sw-f4    ap-f4-b Gi1/0/14 trunk native 10 allowed {10,40,104}
 PASS  sw-f4    cctv Gi1/0/15 access vlan 30 + bpduguard
 PASS  sw-f4    cctv Gi1/0/16 access vlan 30 + bpduguard
@@ -228,8 +242,11 @@ PASS  sw-f5    room 509 on Gi1/0/9: access vlan 105, protected, port-sec, storm,
 PASS  sw-f5    room 510 on Gi1/0/10: access vlan 105, protected, port-sec, storm, bpduguard
 PASS  sw-f5    room 511 on Gi1/0/11: access vlan 105, protected, port-sec, storm, bpduguard
 PASS  sw-f5    room 512 on Gi1/0/12: access vlan 105, protected, port-sec, storm, bpduguard
+PASS  sw-f5    every room port and AP port is protected, uplink is not
 PASS  sw-f5    exactly 12 ports in vlan 105
+PASS  sw-f5    ap-f5-a Gi1/0/13 is protected
 PASS  sw-f5    ap-f5-a Gi1/0/13 trunk native 10 allowed {10,40,105}
+PASS  sw-f5    ap-f5-b Gi1/0/14 is protected
 PASS  sw-f5    ap-f5-b Gi1/0/14 trunk native 10 allowed {10,40,105}
 PASS  sw-f5    cctv Gi1/0/15 access vlan 30 + bpduguard
 PASS  sw-f5    cctv Gi1/0/16 access vlan 30 + bpduguard
@@ -317,4 +334,4 @@ PASS  fw-edge  flow mgmt -> internet 443: accept
 PASS  fw-edge  flow mgmt -> internet 22: deny
 PASS  fw-edge  flow mgmt -> tenant: deny
 
-318/318 checks passed, 0 failed
+335/335 checks passed, 0 failed

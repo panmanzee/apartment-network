@@ -17,8 +17,8 @@ EXTRA = {
     "owner_user": "owner",
     "snmp_user": "nms",
     "contact": "netadmin@baan-chalong.lan",
-    "syslog_host": "10.20.10.250",
-    "nms_host": "10.20.10.250",
+    "syslog_host": "10.20.10.50",
+    "nms_host": "10.20.10.50",
     "upstream_ntp": ["th.pool.ntp.org", "time.google.com"],
     "blackhole_vlan": 999,
     "banner": ("Authorized access only. Activity is logged.\n"
@@ -29,7 +29,7 @@ WANS = [("wan1", "ISP-A primary"), ("wan2", "ISP-B backup")]
 RFC1918 = [("rfc1918-10", "10.0.0.0/8"), ("rfc1918-172", "172.16.0.0/12"),
            ("rfc1918-192", "192.168.0.0/16")]
 # core port map (not in the plan)
-CORE = {"fw": [1, 2], "nvr": 5, "lobby_ap": 6, "lobby_cctv": [7, 8, 9, 10],
+CORE = {"fw": [1, 2], "mon": 3, "admin": 4, "nvr": 5, "lobby_ap": 6, "lobby_cctv": [7, 8, 9, 10],
         "floor_base": 10, "staff": [17, 18, 19, 20]}
 PORTS = 24
 
@@ -160,7 +160,7 @@ def sw_core(plan, env, site):
     dev = next(d for d in plan["devices"] if d["name"] == "sw-core")
     floors = plan["site"]["floors"]
     all_ids = [v["id"] for v in plan["vlans"]]
-    used = set(CORE["fw"] + [CORE["nvr"], CORE["lobby_ap"]] + CORE["lobby_cctv"] + CORE["staff"]
+    used = set(CORE["fw"] + [CORE["mon"], CORE["admin"], CORE["nvr"], CORE["lobby_ap"]] + CORE["lobby_cctv"] + CORE["staff"]
                + [CORE["floor_base"] + n for n in range(1, floors + 1)])
     h = dev | {
         "stp_root": True, "location": "MDF rack",
@@ -170,7 +170,9 @@ def sw_core(plan, env, site):
         "floor_ports": [{"ifname": gi(CORE["floor_base"] + n), "name": f"sw-f{n}",
                          "allowed": [10, 30, 40, 100 + n]} for n in range(1, floors + 1)],
         "access_ports": (
-            [{"ifname": gi(CORE["nvr"]), "name": "nvr-01", "vlan": 30, "protected": False, "maxmac": 1}]
+            [{"ifname": gi(CORE["mon"]), "name": "mon-01", "vlan": 10, "protected": False, "maxmac": 1},
+             {"ifname": gi(CORE["admin"]), "name": "admin-port", "vlan": 10, "protected": False, "maxmac": 1},
+             {"ifname": gi(CORE["nvr"]), "name": "nvr-01", "vlan": 30, "protected": False, "maxmac": 1}]
             + [{"ifname": gi(p), "name": f"cctv-lobby-{i}", "vlan": 30, "protected": True, "maxmac": 1}
                for i, p in enumerate(CORE["lobby_cctv"], 1)]
             + [{"ifname": gi(p), "name": f"staff-{i}", "vlan": 20, "protected": False, "maxmac": 3}

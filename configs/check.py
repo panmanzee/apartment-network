@@ -101,6 +101,11 @@ def check_access(dev):
               and "spanning-tree portfast" in p and "spanning-tree bpduguard enable" in p
               and "shutdown" not in p)
         check(name, f"room {room} on Gi1/0/{i}: access vlan {tv}, protected, port-sec, storm, bpduguard", ok)
+    prot_room = [k for k, v in ports.items() if v and f"switchport access vlan {tv}" in v and "switchport protected" in v]
+    check(name, "every room port and AP port is protected, uplink is not",
+          len(prot_room) == ap["room_ports"]
+          and all("switchport protected" in ports.get(gi(i), []) for i in ap["ap_ports"])
+          and "switchport protected" not in ports.get(gi(ap["uplink"]), []))
     tenant_ports = [k for k, v in ports.items() if f"switchport access vlan {tv}" in v]
     check(name, f"exactly {ap['room_ports']} ports in vlan {tv}", len(tenant_ports) == ap["room_ports"])
     # APs
@@ -108,6 +113,8 @@ def check_access(dev):
     for apname, pn in zip(aps, ap["ap_ports"]):
         p = ports.get(gi(pn), [])
         allowed = vlan_set(val(p, "switchport trunk allowed vlan ") or "0")
+        check(name, f"{apname} Gi1/0/{pn} is protected",
+              "switchport protected" in p)
         check(name, f"{apname} Gi1/0/{pn} trunk native 10 allowed {{10,40,{tv}}}",
               "switchport mode trunk" in p and "switchport trunk native vlan 10" in p
               and allowed == {10, 40, tv} and val(p, "description ") == apname)
@@ -165,8 +172,11 @@ def check_core(dev):
     check(name, "nvr + 4 lobby cctv ports in vlan 30", len(cctv) == 5)
     check(name, "staff ports in vlan 20", sum("switchport access vlan 20" in v for v in ports.values()) == 4)
     ap = ports.get(gi(6), [])
+    check(name, "ap-lobby port is protected", "switchport protected" in ap)
     check(name, "ap-lobby trunk native 10 allowed {10,40}",
           "switchport trunk native vlan 10" in ap and vlan_set(val(ap, "switchport trunk allowed vlan ") or "0") == {10, 40})
+    check(name, "mon-01 Gi1/0/3 and admin Gi1/0/4 in vlan 10",
+          all("switchport access vlan 10" in ports.get(gi(i), []) for i in (3, 4)))
     check(name, "no tenant vlan reaches core access ports",
           not any(any(f"switchport access vlan {t}" in v for t in range(101, 106)) for v in ports.values()))
     check(name, "all 24 ports configured", all(gi(p) in ports for p in range(1, 25)))
