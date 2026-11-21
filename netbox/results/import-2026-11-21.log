@@ -4,7 +4,7 @@
  Container bcr-netbox-valkey-1  Started
  Container bcr-netbox-netbox-1  Starting
  Container bcr-netbox-netbox-1  Started
-netbox up after 44 checks
+netbox up after 47 checks
 token 1 1 True True
 ## run 1
 site             created=   1 existing=   0
@@ -15,9 +15,9 @@ vlan             created=  10 existing=   0
 prefix           created=  11 existing=   0
 device           created=  44 existing=   0
 interface        created= 169 existing=   0
-ip_address       created=  56 existing=   0
+ip_address       created=  54 existing=   0
 primary_ip4_set  created=  44 existing=   0
-TOTAL created=352
+TOTAL created=350
 ## run 2
 site             created=   0 existing=   1
 manufacturer     created=   0 existing=   3
@@ -27,7 +27,7 @@ vlan             created=   0 existing=  10
 prefix           created=   0 existing=  11
 device           created=   0 existing=  44
 interface        created=   0 existing= 169
-ip_address       created=   0 existing=  56
+ip_address       created=   0 existing=  54
 primary_ip4_set  created=   0 existing=  44
 TOTAL created=0
 export written results/export-2026-11-21.json
@@ -38,17 +38,3 @@ export written results/export-2026-11-21.json
  Network bcr-netbox_default  Removing
  Network bcr-netbox_default  Removed
 ## stack removed, containers left on PC:
-clab-apt-owner
-clab-apt-room101
-clab-apt-cam
-clab-apt-internet
-clab-apt-room102
-clab-apt-room103
-clab-apt-isp
-clab-apt-mgmtpc
-clab-apt-fw-edge
-clab-apt-staff
-clab-apt-guest
-clab-apt-sw-f1
-clab-apt-sw-core
-clab-apt-nvr

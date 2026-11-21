@@ -46,12 +46,12 @@ Needs docker + containerlab (ran on WSL2 Ubuntu, kernel 6.6).
 - bandwidth (iperf3, 8 s): tenant 99.3 down / 49.7 up Mbps (plan 100/50), guest 19.9 / 9.9 Mbps (plan 20/10)
 
 Other evidence:
-- `configs/results/check-2026-11-21.log`: 318/318 static checks on the rendered configs; `ansible-lint` 0 failures
-- `netbox/results/import-2026-11-21.log`: 308 objects created + 44 primary-IP assignments, second run creates nothing (idempotent)
+- `configs/results/check-2026-11-21.log`: 335/335 static checks on the rendered configs (own script, `configs/check.py`); `ansible-lint` 0 failures
+- `netbox/results/import-2026-11-21.log`: 306 objects created + 44 primary-IP assignments, second run creates nothing (idempotent)
 
 ## Not done / limits
 
 - FortiOS and IOS configs were **not** run on real devices or vendor VMs (FortiGate-VM, CML and Packet Tracer
-  need vendor accounts). Known gaps are listed in `configs/README.md` (e.g. FortiOS per-IP shaper is one limit for both directions).
+  need vendor accounts), and no vendor parser (e.g. Batfish) was run on them yet. Known gaps are listed in `configs/README.md` (e.g. FortiOS per-IP shaper is one limit for both directions).
 - Lab covers one floor; the other 4 floors use the same config with a different VLAN.
 - BOM prices are retail listings, some converted from foreign shops (option B is ~65% converted; marked in `bom/bom.md`).
